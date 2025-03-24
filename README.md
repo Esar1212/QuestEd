@@ -1,2 +1,2 @@
 # Online Examination Portal by Team QuestEd
-* This online website is under development
+* This Next.js Project is under development
