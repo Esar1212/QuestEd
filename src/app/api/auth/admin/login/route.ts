@@ -16,19 +16,16 @@ export async function POST(request: Request) {
       // Verify admin password
       if (validatedData.password === process.env.ADMIN_PASSWORD) {
         // Create response with success message
-        const response = new Response(
-          JSON.stringify({
-            success: true,
-            message: 'Admin login successful',
-            role: 'admin',
-          }),
-          {
-            status: 200,
-            headers: {
-              'Content-Type': 'application/json',
-              'Set-Cookie': `admin_token=admin_authenticated; HttpOnly; Secure; SameSite=Lax; Max-Age=${60 * 60 * 24 * 7}`
-            }
-          }
+        const response = NextResponse.json({
+          success: true,
+          message: 'Admin login successful',
+          role: 'admin',
+        });
+
+        // Set cookie using response headers
+        response.headers.set(
+          'Set-Cookie',
+          `admin_token=admin_authenticated; HttpOnly; Secure; SameSite=Lax; Max-Age=${60 * 60 * 24 * 7}`
         );
 
         return response;
@@ -36,47 +33,32 @@ export async function POST(request: Request) {
     }
 
     // If not admin or invalid credentials
-    return new Response(
-      JSON.stringify({
+    return NextResponse.json(
+      {
         success: false,
         message: 'Invalid email or password',
-      }),
-      {
-        status: 401,
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      }
+      },
+      { status: 401 }
     );
   } catch (error) {
     console.error('Login API error:', error);
     
     if (error instanceof z.ZodError) {
-      return new Response(
-        JSON.stringify({
+      return NextResponse.json(
+        {
           success: false,
           message: error.errors[0].message,
-        }),
-        {
-          status: 400,
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        }
+        },
+        { status: 400 }
       );
     }
 
-    return new Response(
-      JSON.stringify({
+    return NextResponse.json(
+      {
         success: false,
         message: 'Internal server error',
-      }),
-      {
-        status: 500,
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      }
+      },
+      { status: 500 }
     );
   }
 } 
