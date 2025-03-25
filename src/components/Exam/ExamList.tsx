@@ -16,19 +16,19 @@ const ExamList: React.FC = () => {
   const exams: Exam[] = [
     {
       id: '1',
-      title: 'JavaScript Fundamentals',
+      title: 'Physics Mid-term Exam',
       duration: '60 minutes',
       totalQuestions: 30,
     },
     {
       id: '2',
-      title: 'React Development',
+      title: 'Mathematics Mid-term Exam',
       duration: '90 minutes',
       totalQuestions: 45,
     },
     {
       id: '3',
-      title: 'Node.js Basics',
+      title: 'Chemistry Mid-term Exam',
       duration: '75 minutes',
       totalQuestions: 35,
     },
