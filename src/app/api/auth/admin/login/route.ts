@@ -15,19 +15,15 @@ export async function POST(request: Request) {
     if (validatedData.email === process.env.ADMIN_EMAIL) {
       // Verify admin password
       if (validatedData.password === process.env.ADMIN_PASSWORD) {
-        // Create response with success message
+        // Create response with success message and set cookie
         const response = NextResponse.json({
           success: true,
           message: 'Admin login successful',
           role: 'admin',
-        });
-
-        // Set admin token in cookies
-        response.cookies.set('admin_token', 'admin_authenticated', {
-          httpOnly: true,
-          secure: process.env.NODE_ENV === 'production',
-          sameSite: 'lax',
-          maxAge: 60 * 60 * 24 * 7, // 1 week
+        }, {
+          headers: {
+            'Set-Cookie': `admin_token=admin_authenticated; HttpOnly; Secure; SameSite=Lax; Max-Age=${60 * 60 * 24 * 7}`
+          }
         });
 
         return response;
@@ -64,3 +60,4 @@ export async function POST(request: Request) {
     );
   }
 } 
+       
