@@ -1,5 +1,4 @@
 import { NextResponse } from 'next/server';
-import { cookies } from 'next/headers';
 import { z } from 'zod';
 
 const loginSchema = z.object({
@@ -12,30 +11,16 @@ export async function POST(request: Request) {
     const body = await request.json();
     const validatedData = loginSchema.parse(body);
 
-    // Debug log (remove in production)
-    console.log('Login attempt:', {
-      providedEmail: validatedData.email,
-      providedPassword: validatedData.password,
-      expectedEmail: process.env.ADMIN_EMAIL,
-      expectedPassword: process.env.ADMIN_PASSWORD,
-    });
-
     // Check if it's an admin login attempt
     if (validatedData.email === process.env.ADMIN_EMAIL) {
       // Verify admin password
       if (validatedData.password === process.env.ADMIN_PASSWORD) {
-        // Set admin token in cookies
-        cookies().set('admin_token', 'admin_authenticated', {
-          httpOnly: true,
-          secure: process.env.NODE_ENV === 'production',
-          sameSite: 'lax',
-          maxAge: 60 * 60 * 24 * 7, // 1 week
-        });
-
+        // Return success with token
         return NextResponse.json({
           success: true,
-          message: 'Admin login successful',
+          message: 'Login successful',
           role: 'admin',
+          token: 'admin_authenticated'
         });
       }
     }
