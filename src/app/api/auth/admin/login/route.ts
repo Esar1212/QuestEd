@@ -1,5 +1,4 @@
 import { NextResponse } from 'next/server';
-import { cookies } from 'next/headers';
 import { z } from 'zod';
 
 const loginSchema = z.object({
@@ -16,19 +15,22 @@ export async function POST(request: Request) {
     if (validatedData.email === process.env.ADMIN_EMAIL) {
       // Verify admin password
       if (validatedData.password === process.env.ADMIN_PASSWORD) {
+        // Create response with success message
+        const response = NextResponse.json({
+          success: true,
+          message: 'Admin login successful',
+          role: 'admin',
+        });
+
         // Set admin token in cookies
-        cookies().set('admin_token', 'admin_authenticated', {
+        response.cookies.set('admin_token', 'admin_authenticated', {
           httpOnly: true,
           secure: process.env.NODE_ENV === 'production',
           sameSite: 'lax',
           maxAge: 60 * 60 * 24 * 7, // 1 week
         });
 
-        return NextResponse.json({
-          success: true,
-          message: 'Admin login successful',
-          role: 'admin',
-        });
+        return response;
       }
     }
 
