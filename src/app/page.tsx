@@ -65,7 +65,7 @@ export default function Home() {
         <div className="footer-content">
           <div className="footer-section">
             <h3>About Us</h3>
-            <p>Online Examination Panel is your trusted platform for conducting and taking online exams. We provide a seamless experience for both educators and students.</p>
+            <p>Online Examination Portal is your trusted platform for conducting and taking online exams. We provide a seamless experience for both educators and students.</p>
           </div>
           <div className="footer-section">
             <h3>Quick Links</h3>
@@ -103,7 +103,7 @@ export default function Home() {
           </div>
         </div>
         <div className="footer-bottom">
-          <p>© 2024 Online Examination Portal. All rights reserved by <b>Team QuestEd</b>.</p>
+          <p>© 2025 Online Examination Portal. All rights reserved by <b>Team QuestEd</b>.</p>
         </div>
       </footer>
     </div>
