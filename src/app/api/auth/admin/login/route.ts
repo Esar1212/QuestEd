@@ -15,49 +15,68 @@ export async function POST(request: Request) {
     if (validatedData.email === process.env.ADMIN_EMAIL) {
       // Verify admin password
       if (validatedData.password === process.env.ADMIN_PASSWORD) {
-        // Create response with success message and set cookie
-        const response = NextResponse.json({
-          success: true,
-          message: 'Admin login successful',
-          role: 'admin',
-        }, {
-          headers: {
-            'Set-Cookie': `admin_token=admin_authenticated; HttpOnly; Secure; SameSite=Lax; Max-Age=${60 * 60 * 24 * 7}`
+        // Create response with success message
+        const response = new Response(
+          JSON.stringify({
+            success: true,
+            message: 'Admin login successful',
+            role: 'admin',
+          }),
+          {
+            status: 200,
+            headers: {
+              'Content-Type': 'application/json',
+              'Set-Cookie': `admin_token=admin_authenticated; HttpOnly; Secure; SameSite=Lax; Max-Age=${60 * 60 * 24 * 7}`
+            }
           }
-        });
+        );
 
         return response;
       }
     }
 
     // If not admin or invalid credentials
-    return NextResponse.json(
-      {
+    return new Response(
+      JSON.stringify({
         success: false,
         message: 'Invalid email or password',
-      },
-      { status: 401 }
+      }),
+      {
+        status: 401,
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }
     );
   } catch (error) {
     console.error('Login API error:', error);
     
     if (error instanceof z.ZodError) {
-      return NextResponse.json(
-        {
+      return new Response(
+        JSON.stringify({
           success: false,
           message: error.errors[0].message,
-        },
-        { status: 400 }
+        }),
+        {
+          status: 400,
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }
       );
     }
 
-    return NextResponse.json(
-      {
+    return new Response(
+      JSON.stringify({
         success: false,
         message: 'Internal server error',
-      },
-      { status: 500 }
+      }),
+      {
+        status: 500,
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }
     );
   }
 } 
-       
