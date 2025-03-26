@@ -184,6 +184,7 @@ export default function RegisterForm({ defaultUserType = 'student' }: RegisterFo
               <input
                 type="text"
                 name="fullName"
+                pattern="[a-zA-Z\s]+"
                 placeholder="Full Name"
                 value={formData.fullName}
                 onChange={handleChange}
@@ -214,7 +215,7 @@ export default function RegisterForm({ defaultUserType = 'student' }: RegisterFo
               <div className="form-group">
                 <div className="input-group">
                   <input
-                    type="text"
+                    type="number"
                     name="rollNumber"
                     placeholder="Roll Number"
                     value={formData.rollNumber}
@@ -229,7 +230,9 @@ export default function RegisterForm({ defaultUserType = 'student' }: RegisterFo
               <div className="form-group">
                 <div className="input-group">
                   <input
-                    type="text"
+                    type="number"
+                    min="1"
+                    max="12"
                     name="class"
                     placeholder="Class"
                     value={formData.class}
@@ -245,6 +248,7 @@ export default function RegisterForm({ defaultUserType = 'student' }: RegisterFo
                 <div className="input-group">
                   <input
                     type="text"
+                    pattern="[A-Za-z\s]+"
                     name="studentSubject"
                     placeholder="Subject"
                     value={formData.studentSubject}
@@ -264,6 +268,7 @@ export default function RegisterForm({ defaultUserType = 'student' }: RegisterFo
                 <div className="input-group">
                   <input
                     type="text"
+                    pattern="[a-zA-Z\s]+"
                     name="subject"
                     placeholder="Subject"
                     value={formData.subject}
@@ -279,6 +284,7 @@ export default function RegisterForm({ defaultUserType = 'student' }: RegisterFo
                 <div className="input-group">
                   <input
                     type="text"
+                    pattern="[a-zA-Z0-9\s]+"
                     name="qualification"
                     placeholder="Qualification"
                     value={formData.qualification}
@@ -349,3 +355,11 @@ export default function RegisterForm({ defaultUserType = 'student' }: RegisterFo
     </div>
   );
 }
+
+     
+
+ 
+
+              
+           
+         
