@@ -11,6 +11,7 @@ interface RegisterFormProps {
 export default function RegisterForm({ defaultUserType = 'student' }: RegisterFormProps) {
   const router = useRouter();
   const [userType, setUserType] = useState<'student' | 'teacher'>(defaultUserType);
+  const [isCollegeStudent, setIsCollegeStudent] = useState(false);
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
@@ -23,6 +24,9 @@ export default function RegisterForm({ defaultUserType = 'student' }: RegisterFo
     rollNumber: '',
     class: '',
     studentSubject: '',
+    // College student specific fields
+    stream: '',
+    year: '',
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [showPassword, setShowPassword] = useState(false);
@@ -66,11 +70,21 @@ export default function RegisterForm({ defaultUserType = 'student' }: RegisterFo
       if (!formData.rollNumber.trim()) {
         newErrors.rollNumber = 'Roll number is required';
       }
-      if (!formData.class.trim()) {
-        newErrors.class = 'Class is required';
-      }
       if (!formData.studentSubject.trim()) {
         newErrors.studentSubject = 'Subject is required';
+      }
+      
+      if (isCollegeStudent) {
+        if (!formData.stream.trim()) {
+          newErrors.stream = 'Stream is required';
+        }
+        if (!formData.year.trim()) {
+          newErrors.year = 'Year is required';
+        }
+      } else {
+        if (!formData.class.trim()) {
+          newErrors.class = 'Class is required';
+        }
       }
     }
 
@@ -91,8 +105,16 @@ export default function RegisterForm({ defaultUserType = 'student' }: RegisterFo
           ...(userType === 'student' 
             ? {
                 rollNumber: formData.rollNumber,
-                class: formData.class,
                 studentSubject: formData.studentSubject,
+                ...(isCollegeStudent 
+                  ? {
+                      stream: formData.stream,
+                      year: formData.year,
+                    }
+                  : {
+                      class: formData.class,
+                    }
+                ),
               }
             : {
                 subject: formData.subject,
@@ -200,7 +222,7 @@ export default function RegisterForm({ defaultUserType = 'student' }: RegisterFo
               <input
                 type="email"
                 name="email"
-                placeholder="Email Address"
+                placeholder="Email"
                 value={formData.email}
                 onChange={handleChange}
                 className={errors.email ? 'error' : ''}
@@ -210,6 +232,50 @@ export default function RegisterForm({ defaultUserType = 'student' }: RegisterFo
             {errors.email && <span className="error-message">{errors.email}</span>}
           </div>
 
+          <div className="form-group">
+            <div className="input-group">
+              <input
+                type={showPassword ? 'text' : 'password'}
+                name="password"
+                placeholder="Password"
+                value={formData.password}
+                onChange={handleChange}
+                className={errors.password ? 'error' : ''}
+              />
+              <button
+                type="button"
+                className="password-toggle"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                <i className={`fas ${showPassword ? 'fa-eye-slash' : 'fa-eye'}`}></i>
+              </button>
+            </div>
+            {errors.password && <span className="error-message">{errors.password}</span>}
+          </div>
+
+          <div className="form-group">
+            <div className="input-group">
+              <input
+                type={showConfirmPassword ? 'text' : 'password'}
+                name="confirmPassword"
+                placeholder="Confirm Password"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                className={errors.confirmPassword ? 'error' : ''}
+              />
+              <button
+                type="button"
+                className="password-toggle"
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+              >
+                <i className={`fas ${showConfirmPassword ? 'fa-eye-slash' : 'fa-eye'}`}></i>
+              </button>
+            </div>
+            {errors.confirmPassword && <span className="error-message">{errors.confirmPassword}</span>}
+          </div>
+         
+
+
           {userType === 'student' && (
             <>
               <div className="form-group">
@@ -217,6 +283,7 @@ export default function RegisterForm({ defaultUserType = 'student' }: RegisterFo
                   <input
                     type="number"
                     name="rollNumber"
+                    min='1'
                     placeholder="Roll Number"
                     value={formData.rollNumber}
                     onChange={handleChange}
@@ -226,65 +293,106 @@ export default function RegisterForm({ defaultUserType = 'student' }: RegisterFo
                 </div>
                 {errors.rollNumber && <span className="error-message">{errors.rollNumber}</span>}
               </div>
-
               <div className="form-group">
+                <div className="input-group">
+                  <select
+                    name="isCollegeStudent"
+                    value={isCollegeStudent ? 'college' : 'school'}
+                    onChange={(e) => setIsCollegeStudent(e.target.value === 'college')}
+                    className={errors.isCollegeStudent ? 'error' : ''}
+                  >
+                    <option value="school">School Student</option>
+                    <option value="college">College Student</option>
+                  </select>
+                </div>
+              </div>
+
+              
+
+              
+              {isCollegeStudent ? (
+                <>
+                  <div className="form-group">
+            <div className="input-group">
+              <input
+                type="text"
+                name="stream"
+                pattern="[a-zA-Z\s]+"
+                placeholder="Stream"
+                value={formData.stream}
+                onChange={handleChange}
+                className={errors.stream ? 'error' : ''}
+              />
+              <i className="fas fa-stream"></i>
+            </div>
+            {errors.stream && <span className="error-message">{errors.stream}</span>}
+          </div>
+                  <div className="form-group">
+                    <div className="input-group">
+                      <select
+                        name="year"
+                        value={formData.year}
+                        onChange={handleChange}
+                        className={errors.year ? 'error' : ''}
+                      >
+                        <option value="">Select Year</option>
+                        <option value="1">First Year</option>
+                        <option value="2">Second Year</option>
+                        <option value="3">Third Year</option>
+                        <option value="4">Fourth Year</option>
+                      </select>
+          
+                    </div>
+                    {errors.year && <span className="error-message">{errors.year}</span>}
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="form-group">
                 <div className="input-group">
                   <input
                     type="number"
-                    min="1"
-                    max="12"
+                    min='1'
+                    max='12'
                     name="class"
                     placeholder="Class"
                     value={formData.class}
                     onChange={handleChange}
                     className={errors.class ? 'error' : ''}
                   />
-                  <i className="fas fa-chalkboard"></i>
+                  <i className="fas fa-school"></i>
                 </div>
                 {errors.class && <span className="error-message">{errors.class}</span>}
               </div>
 
-              <div className="form-group">
-                <div className="input-group">
-                  <input
-                    type="text"
-                    pattern="[A-Za-z\s]+"
-                    name="studentSubject"
-                    placeholder="Subject"
-                    value={formData.studentSubject}
-                    onChange={handleChange}
-                    className={errors.studentSubject ? 'error' : ''}
-                  />
-                  <i className="fas fa-book"></i>
-                </div>
-                {errors.studentSubject && <span className="error-message">{errors.studentSubject}</span>}
-              </div>
+                </>
+              )}
             </>
           )}
 
           {userType === 'teacher' && (
             <>
+              
               <div className="form-group">
-                <div className="input-group">
-                  <input
-                    type="text"
-                    pattern="[a-zA-Z\s]+"
-                    name="subject"
-                    placeholder="Subject"
-                    value={formData.subject}
-                    onChange={handleChange}
-                    className={errors.subject ? 'error' : ''}
-                  />
-                  <i className="fas fa-book-open"></i>
-                </div>
-                {errors.subject && <span className="error-message">{errors.subject}</span>}
-              </div>
+            <div className="input-group">
+              <input
+                type="text"
+                name="fullName"
+                pattern="[a-zA-Z\s]+"
+                placeholder="Subject"
+                value={formData.subject}
+                onChange={handleChange}
+                className={errors.subject ? 'error' : ''}
+              />
+              <i className="fas fa-book"></i>
+            </div>
+            {errors.subject && <span className="error-message">{errors.subject}</span>}
+          </div>
 
               <div className="form-group">
                 <div className="input-group">
                   <input
                     type="text"
-                    pattern="[a-zA-Z0-9\s]+"
                     name="qualification"
                     placeholder="Qualification"
                     value={formData.qualification}
@@ -298,49 +406,9 @@ export default function RegisterForm({ defaultUserType = 'student' }: RegisterFo
             </>
           )}
 
-          <div className="form-group">
-            <div className="input-group">
-              <button
-                type="button"
-                className="password-toggle"
-                onClick={() => setShowPassword(!showPassword)}
-                aria-label="Toggle password visibility"
-              >
-                <i className={`fas ${showPassword ? 'fa-eye-slash' : 'fa-eye'}`}></i>
-              </button>
-              <input
-                type={showPassword ? "text" : "password"}
-                name="password"
-                placeholder="Password"
-                value={formData.password}
-                onChange={handleChange}
-                className={errors.password ? 'error' : ''}
-              />
-            </div>
-            {errors.password && <span className="error-message">{errors.password}</span>}
-          </div>
-
-          <div className="form-group">
-            <div className="input-group">
-              <button
-                type="button"
-                className="password-toggle"
-                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                aria-label="Toggle password visibility"
-              >
-                <i className={`fas ${showConfirmPassword ? 'fa-eye-slash' : 'fa-eye'}`}></i>
-              </button>
-              <input
-                type={showConfirmPassword ? "text" : "password"}
-                name="confirmPassword"
-                placeholder="Confirm Password"
-                value={formData.confirmPassword}
-                onChange={handleChange}
-                className={errors.confirmPassword ? 'error' : ''}
-              />
-            </div>
-            {errors.confirmPassword && <span className="error-message">{errors.confirmPassword}</span>}
-          </div>
+          {errors.submit && (
+            <div className="error-message text-center">{errors.submit}</div>
+          )}
 
           <button type="submit" className="register-button">
             <i className="fas fa-user-plus"></i>
@@ -356,6 +424,7 @@ export default function RegisterForm({ defaultUserType = 'student' }: RegisterFo
   );
 }
 
+         
      
 
  
