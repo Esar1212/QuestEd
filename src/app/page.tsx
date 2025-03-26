@@ -103,7 +103,7 @@ export default function Home() {
           </div>
         </div>
         <div className="footer-bottom">
-          <p>© 2025 Online Examination Portal. All rights reserved by <b>Team QuestEd</b>.</p>
+          <p>© 2025 Online Examination Portal. All rights reserved by <b>Team IdeaForge</b>.</p>
         </div>
       </footer>
     </div>
