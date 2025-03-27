@@ -65,7 +65,7 @@ export default function Home() {
         <div className="footer-content">
           <div className="footer-section">
             <h3>About Us</h3>
-            <p>Online Examination Portal is your trusted platform for conducting and taking online exams. We provide a seamless experience for both educators and students.</p>
+            <p>QuestEd is your trusted platform for conducting and taking online exams. We provide a seamless experience for both educators and students.</p>
           </div>
           <div className="footer-section">
             <h3>Quick Links</h3>
