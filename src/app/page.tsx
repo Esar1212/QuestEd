@@ -79,23 +79,23 @@ export default function Home() {
           <div className="footer-section">
             <h3>Contact Info</h3>
             <ul className="contact-info">
-              <li>Email: support@onlineexam.com</li>
+              <li>Email: support@quested.com</li>
               <li>Phone: +91 1234567990</li>
-              <li>Address: 123 Education Street</li>
+              <li>Address: Heritage Institute of Technology, Kolkata</li>
             </ul>
           </div>
           <div className="footer-section">
             <h3>Follow Us</h3>
             <div className="social-links">
-              <a href="#" className="social-link">
+              <a href="https://www.facebook.com/login/" className="social-link">
                 <i className="fab fa-facebook-f"></i>
                 <span>Facebook</span>
               </a>
-              <a href="#" className="social-link">
+              <a href="https://x.com/i/flow/login" className="social-link">
                 <i className="fab fa-twitter"></i>
                 <span>Twitter</span>
               </a>
-              <a href="#" className="social-link">
+              <a href="https://www.linkedin.com/login" className="social-link">
                 <i className="fab fa-linkedin-in"></i>
                 <span>LinkedIn</span>
               </a>
@@ -103,7 +103,7 @@ export default function Home() {
           </div>
         </div>
         <div className="footer-bottom">
-          <p>© 2025 Online Examination Portal. All rights reserved by <b>Team IdeaForge</b>.</p>
+          <p>© 2025<b> QuestEd </b> Online Examination Portal. All rights reserved by <b>Team IdeaForge</b>.</p>
         </div>
       </footer>
     </div>
