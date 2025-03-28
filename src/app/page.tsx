@@ -80,7 +80,7 @@ export default function Home() {
             <h3>Contact Info</h3>
             <ul className="contact-info">
               <li>Email: support@onlineexam.com</li>
-              <li>Phone: +1 (555) 123-4567</li>
+              <li>Phone: +91 1234567990</li>
               <li>Address: 123 Education Street</li>
             </ul>
           </div>
