@@ -102,7 +102,7 @@ export default function TeacherDashboard() {
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <div>
             <h2 style={{ fontSize: '2.5rem', marginBottom: '1rem', color: 'white' }}>
-              Welcome, {userData?.fullName}
+              Welcome,Teacher {userData?.fullName}
             </h2>
             <p style={{ color: 'rgba(255, 255, 255, 0.9)', marginBottom: '0.5rem' }}>Subject: {userData?.subject}</p>
             <p style={{ color: 'rgba(255, 255, 255, 0.9)' }}>Qualification: {userData?.qualification}</p>
