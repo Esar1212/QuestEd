@@ -1,21 +1,17 @@
-// scripts/testConnection.js
 require('dotenv').config({ path: '.env.local' }); // Explicitly load .env.local
 const mongoose = require('mongoose');
 
-// 1. Verify environment variable is loaded
 if (!process.env.MONGODB_URI) {
-  console.error('❌ MONGODB_URI is not defined in .env.local');
+  console.error('MONGODB_URI is not defined in .env.local');
   console.log('Current environment variables:', process.env);
   process.exit(1);
 }
 
-// 2. Safe logging (mask credentials)
 const redactedUri = process.env.MONGODB_URI
   .replace(/\/\/([^:]+):([^@]+)@/, '//REDACTED_USER:REDACTED_PASSWORD@');
 
 console.log('Connecting to:', redactedUri);
 
-// 3. Connection with enhanced error handling
 mongoose.connect(process.env.MONGODB_URI, {
   serverSelectionTimeoutMS: 5000,
   socketTimeoutMS: 30000,
