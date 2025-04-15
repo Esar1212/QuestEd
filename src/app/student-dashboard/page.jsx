@@ -203,17 +203,7 @@ export default function StudentDashboard() {
           </div>
         </div>
 
-        {/* Upcoming Exams Card */}
-        <div style={{
-          background: 'white',
-          padding: '1.5rem',
-          borderRadius: '8px',
-          boxShadow: '0 2px 4px rgba(0,0,0,0.05)'
-        }}>
-          <h2 style={{ fontSize: '1.5rem', color: '#2a5298', marginBottom: '1rem' }}>Upcoming Exams</h2>
-          <p style={{ color: '#666', textAlign: 'center', padding: '2rem 0' }}>No upcoming exams scheduled</p>
-        </div>
-
+        
         {/* Recent Activity Card */}
         <div style={{
           background: 'white',
@@ -235,77 +225,120 @@ export default function StudentDashboard() {
       {/* Study Resources Section */}
       <div style={{
         maxWidth: '1400px',
-        marginTop: '0',
-        marginRight: 'auto',
-        marginLeft: 'auto',
-        marginBottom: '0',
-        background: 'white',
+        margin: '2rem auto',
         padding: '2rem',
-        borderRadius: '8px',
-        boxShadow: '0 2px 4px rgba(0,0,0,0.05)'
+        background: 'white',
+        borderRadius: '12px',
+        boxShadow: '0 4px 6px rgba(0,0,0,0.1)'
       }}>
-        <h2 style={{ fontSize: '1.8rem', color: '#2a5298', marginBottom: '1.5rem' }}>Study Resources</h2>
+        <h2 style={{
+          fontSize: '2rem',
+          color: '#2a5298',
+          marginBottom: '2rem',
+          borderBottom: '2px solid #e5e7eb',
+          paddingBottom: '0.75rem'
+        }}>Study Resources</h2>
+
         <div style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-          gap: '1.5rem'
+          gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+          gap: '2rem'
         }}>
-          {['Practice Papers', 'Study Materials', 'Video Lectures', 'Mock Tests'].map((item, index) => (
-            <div key={index} style={{
-              padding: '1.8rem',
-              background: 'linear-gradient(145deg, #ffffff, #f8f9fa)',
-              borderRadius: '12px',
+          {/* Exam Papers Card */}
+          <div style={{
+            background: 'linear-gradient(145deg, #ffffff, #f8f9fa)',
+            padding: '2rem',
+            borderRadius: '12px',
+            boxShadow: '0 4px 6px rgba(0,0,0,0.05)',
+            border: '1px solid #e5e7eb',
+            transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+            cursor: 'pointer'
+          }}
+          onClick={() => router.push('/ExamPapers')}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform = 'translateY(-5px)';
+            e.currentTarget.style.boxShadow = '0 8px 16px rgba(0,0,0,0.1)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = 'translateY(0)';
+            e.currentTarget.style.boxShadow = '0 4px 6px rgba(0,0,0,0.05)';
+          }}>
+            <h3 style={{ fontSize: '1.5rem', color: '#2a5298', marginBottom: '1rem' }}>Exam Papers</h3>
+            <p style={{ color: '#666', marginBottom: '1.5rem' }}>Access and attempt your exam papers here</p>
+            <div style={{
+              background: '#2a5298',
+              color: 'white',
+              padding: '0.75rem',
+              borderRadius: '8px',
               textAlign: 'center',
-              cursor: 'pointer',
-              transition: 'all 0.3s ease',
-              boxShadow: '0 8px 16px rgba(0,0,0,0.1)',
-              marginTop: '0',
-              marginBottom: '0',
-              marginLeft: '0',
-              marginRight: '0',
-              border: '2px solid',
-              borderColor: item === 'Practice Papers' ? '#4CAF50' :
-                          item === 'Study Materials' ? '#2196F3' :
-                          item === 'Video Lectures' ? '#FF9800' :
-                          '#E91E63',
-              position: 'relative',
-              overflow: 'hidden'
-            }}>
-              <div style={{
-                position: 'absolute',
-                top: '0',
-                left: '0',
-                right: '0',
-                height: '4px',
-                background: item === 'Practice Papers' ? '#4CAF50' :
-                           item === 'Study Materials' ? '#2196F3' :
-                           item === 'Video Lectures' ? '#FF9800' :
-                           '#E91E63'
-              }}></div>
-              <h3 style={{ 
-                color: item === 'Practice Papers' ? '#4CAF50' :
-                       item === 'Study Materials' ? '#2196F3' :
-                       item === 'Video Lectures' ? '#FF9800' :
-                       '#E91E63',
-                marginTop: '0.5rem',
-                marginBottom: '0.8rem',
-                marginLeft: '0',
-                marginRight: '0',
-                fontSize: '1.4rem',
-                fontWeight: '600'
-              }}>{item}</h3>
-              <p style={{ 
-                color: '#666', 
-                fontSize: '1rem',
-                marginTop: '0',
-                marginBottom: '0',
-                marginLeft: '0',
-                marginRight: '0'
-              }}>Coming Soon</p>
-            </div>
-          ))}
+              fontWeight: '500'
+            }}>View Papers</div>
+          </div>
+
+          {/* Video Lectures Card */}
+          <div style={{
+            background: 'linear-gradient(145deg, #ffffff, #f8f9fa)',
+            padding: '2rem',
+            borderRadius: '12px',
+            boxShadow: '0 4px 6px rgba(0,0,0,0.05)',
+            border: '1px solid #e5e7eb',
+            transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+            cursor: 'pointer'
+          }}
+          onClick={() => router.push('/video-lectures')}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform = 'translateY(-5px)';
+            e.currentTarget.style.boxShadow = '0 8px 16px rgba(0,0,0,0.1)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = 'translateY(0)';
+            e.currentTarget.style.boxShadow = '0 4px 6px rgba(0,0,0,0.05)';
+          }}>
+            <h3 style={{ fontSize: '1.5rem', color: '#2a5298', marginBottom: '1rem' }}>Video Lectures</h3>
+            <p style={{ color: '#666', marginBottom: '1.5rem' }}>Watch educational video content</p>
+            <div style={{
+              background: '#2a5298',
+              color: 'white',
+              padding: '0.75rem',
+              borderRadius: '8px',
+              textAlign: 'center',
+              fontWeight: '500'
+            }}>Watch Videos</div>
+          </div>
+
+          {/* Results Card */}
+          <div style={{
+            background: 'linear-gradient(145deg, #ffffff, #f8f9fa)',
+            padding: '2rem',
+            borderRadius: '12px',
+            boxShadow: '0 4px 6px rgba(0,0,0,0.05)',
+            border: '1px solid #e5e7eb',
+            transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+            cursor: 'pointer'
+          }}
+          onClick={() => router.push('/results')}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform = 'translateY(-5px)';
+            e.currentTarget.style.boxShadow = '0 8px 16px rgba(0,0,0,0.1)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = 'translateY(0)';
+            e.currentTarget.style.boxShadow = '0 4px 6px rgba(0,0,0,0.05)';
+          }}>
+            <h3 style={{ fontSize: '1.5rem', color: '#2a5298', marginBottom: '1rem' }}>Results</h3>
+            <p style={{ color: '#666', marginBottom: '1.5rem' }}>View your exam results and progress</p>
+            <div style={{
+              background: '#2a5298',
+              color: 'white',
+              padding: '0.75rem',
+              borderRadius: '8px',
+              textAlign: 'center',
+              fontWeight: '500'
+            }}>Check Results</div>
+          </div>
         </div>
       </div>
-    </div>
+</div>
   );
 }
+     

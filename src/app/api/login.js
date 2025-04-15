@@ -1,4 +1,4 @@
-import dbConnect from '../../../lib/dbConnect';
+import dbConnect from '@/lib/dbConnect';
 import Student from '../../../models/Student';
 import Teacher from '../../../models/Teacher';
 import { createToken, setTokenCookie } from '../../../lib/auth';

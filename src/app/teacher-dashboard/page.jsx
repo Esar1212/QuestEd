@@ -101,8 +101,8 @@ export default function TeacherDashboard() {
       }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <div>
-            <h2 style={{ fontSize: '2.5rem', marginBottom: '1rem', color: 'white' }}>
-              Welcome,Teacher {userData?.fullName}
+            <h2 style={{ fontSize: '2.5rem', marginBottom: '1rem', color: 'white',fontWeight:'bolder' }}>
+             <b>Welcome, Teacher {userData?.fullName}</b>
             </h2>
             <p style={{ color: 'rgba(255, 255, 255, 0.9)', marginBottom: '0.5rem' }}>Subject: {userData?.subject}</p>
             <p style={{ color: 'rgba(255, 255, 255, 0.9)' }}>Qualification: {userData?.qualification}</p>
@@ -163,7 +163,7 @@ export default function TeacherDashboard() {
         }}>
           <h3 style={{ fontSize: '1.5rem', color: '#2a5298', marginBottom: '1.5rem' }}>Quick Actions</h3>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-            <Link href="/create-question-paper" style={{ textDecoration: 'none' }}>
+            <Link href="/create-paper" style={{ textDecoration: 'none' }}>
               <button style={{
                 background: 'linear-gradient(135deg, #2a5298 0%, #1e3c72 100%)',
                 color: 'white',
@@ -185,22 +185,25 @@ export default function TeacherDashboard() {
                 Create Question Paper
               </button>
             </Link>
-            <button style={{
-              background: 'transparent',
-              border: '2px solid #2a5298',
-              color: '#2a5298',
-              padding: '0.8rem',
-              borderRadius: '8px',
-              cursor: 'pointer',
-              fontSize: '1rem',
-              transition: 'all 0.3s ease',
-              ':hover': {
-                background: '#2a5298',
-                color: 'white'
-              }
-            }}>
-              View All Question Papers
-            </button>
+            <Link href="/view-paper" style={{ textDecoration: 'none' }}>
+              <button style={{
+                background: 'transparent',
+                border: '2px solid #2a5298',
+                color: '#2a5298',
+                width: '100%',
+                padding: '0.8rem',
+                borderRadius: '8px',
+                cursor: 'pointer',
+                fontSize: '1rem',
+                transition: 'all 0.3s ease',
+                ':hover': {
+                  background: '#2a5298',
+                  color: 'white'
+                }
+              }}>
+                View All Question Papers
+              </button>
+            </Link>
           </div>
         </div>
 
