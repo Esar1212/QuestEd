@@ -8,7 +8,7 @@ export async function GET(request) {
         const headersList = await headers();
         
         // Verify authentication
-        const authRes = await fetch('/api/auth/verify', {
+        const authRes = await fetch('https://quested.onrender.com/api/auth/verify', {
             headers: {
                 cookie: headersList.get('cookie'),
             }
