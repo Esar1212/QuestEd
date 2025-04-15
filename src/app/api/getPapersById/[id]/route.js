@@ -8,7 +8,7 @@ export async function GET(request) {
         const headersList = await headers();
         
         // Verify authentication
-        const authRes = await fetch('http://localhost:3000/api/auth/verify', {
+        const authRes = await fetch('/api/auth/verify', {
             headers: {
                 cookie: headersList.get('cookie'),
             }
