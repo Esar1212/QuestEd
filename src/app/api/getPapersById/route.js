@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
-import QuestionPaper from "@/models/QuestionPaper";
-import dbConnect from "@/lib/dbConnect";
+import QuestionPaper from "@models/QuestionPaper";
+import dbConnect from "@lib/dbConnect";
 import { headers } from 'next/headers';
 
 export async function GET(request,{ params }) {
