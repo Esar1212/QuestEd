@@ -5,9 +5,15 @@ import { headers } from 'next/headers';
 
 export async function GET(request, { params }) {
   try {
+    // Validate and sanitize the ID parameter
+    const userId = String(params?.id || '');
+    if (!userId) {
+      return NextResponse.json({ error: 'Invalid user ID' }, { status: 400 });
+    }
+
     // Verify authentication
     const headersList = headers();
-    const authResponse = await fetch('http://quested.onrender.com/api/auth/verify', {
+    const authResponse = await fetch('http://localhost:3000/api/auth/verify', {
       headers: {
         cookie: headersList.get('cookie'),
       }
@@ -26,9 +32,9 @@ export async function GET(request, { params }) {
     // Connect to database
     await dbConnect();
 
-    // Get user by ID
-    const user = await User.findById(params.id);
-
+    // Get user by ID with proper type checking
+    const user = await User.findById(userId).exec();
+    
     if (!user) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
@@ -40,3 +46,4 @@ export async function GET(request, { params }) {
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 }
+    
