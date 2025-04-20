@@ -13,7 +13,7 @@ export async function GET(request, { params }) {
 
     // Verify authentication
     const headersList = headers();
-    const authResponse = await fetch('http://localhost:3000/api/auth/verify', {
+    const authResponse = await fetch('https://quested.on.render.com/api/auth/verify', {
       headers: {
         cookie: headersList.get('cookie'),
       }
