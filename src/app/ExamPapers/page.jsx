@@ -115,15 +115,7 @@ const ExamPapers = () => {
               <span style={{ color: '#4CAF50' }}>•</span>
               Do not close the browser during the exam. The exam will be auto-submitted in that case.
             </li>
-            <li style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.75rem',
-              fontSize: '1.1rem'
-            }}>
-              <span style={{ color: '#4CAF50' }}>•</span>
-              Your camera will be turned on during the exam, to prevent foulplay
-            </li>
+            
             <li style={{
               display: 'flex',
               alignItems: 'center',
