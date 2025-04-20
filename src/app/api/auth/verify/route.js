@@ -5,12 +5,12 @@ import dbConnect from '../../../../../lib/dbConnect';
 import Student from '../../../../../models/Student';
 import Teacher from '../../../../../models/Teacher';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
+const JWT_SECRET = process.env.JWT_SECRET||'your-secret-key';
 
 export async function GET(request) {
   try {
     const cookieStore = await cookies();
-    const token = cookieStore.get('authToken')?.value;
+    const token = cookieStore.get('authToken')?.value;// Retrieve the token from cookies
 
     if (!token) {
       console.log('No token found in cookies');

@@ -37,7 +37,7 @@ const ExamList: React.FC = () => {
   const handleStartExam = (examId: string) => {
     // In a real application, you would check if the user is logged in
     // and then navigate to the exam page
-    router.push(`/exam/${examId}`);
+    router.push('/login');
   };
 
   return (

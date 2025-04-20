@@ -1,6 +1,9 @@
 'use client'
 import { useState } from "react";
 
+// Add import for useRouter at the top
+import { useRouter } from 'next/navigation';
+
 const CreateQuestionPaper = () => {
   const [questions, setQuestions] = useState([]);
   const [title, setTitle] = useState("");
@@ -10,7 +13,7 @@ const CreateQuestionPaper = () => {
   const [classStream, setClassStream] = useState("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
-
+   const router= useRouter();
   // Update the addQuestion function to include marks
   const addQuestion = () => {
     setQuestions([...questions, { 
@@ -69,35 +72,61 @@ const CreateQuestionPaper = () => {
   };
 
   return (
+    // Update the main container styles
     <div style={{
       padding: '6rem 2rem 2rem 2rem',
-      maxWidth: '1200px',
-      margin: '0 auto',
+      width: '100%',
+      margin: '0',
       minHeight: '100vh',
-      background: '#1a1a1a'
+      background: 'linear-gradient(135deg, #1a1a1a 0%, #2c2c2c 100%)'
     }}>
+      <div style={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        maxWidth: '1600px',
+        margin: '0 auto 2rem auto',
+        width: '100%'
+      }}>
+        <button
+          onClick={() => router.push('/teacher-dashboard')}
+          style={{
+            padding: '0.75rem 1.5rem',
+            borderRadius: '8px',
+            backgroundColor: 'rgba(255, 255, 255, 0.1)',
+            color: 'white',
+            border: '1px solid rgba(255, 255, 255, 0.2)',
+            cursor: 'pointer',
+            fontSize: '1rem',
+            transition: 'all 0.3s ease',
+            backdropFilter: 'blur(10px)',
+            ':hover': {
+              backgroundColor: 'rgba(255, 255, 255, 0.2)'
+            }
+          }}
+        >
+          ← Back to Dashboard
+        </button>
+      </div>
+
       <h2 style={{
         fontSize: '2.5rem',
         color: 'white',
         marginBottom: '2rem',
         textAlign: 'center',
-        fontWeight:'bolder'
+        fontWeight: 'bolder',
+        width: '100%'
       }}>Create Question Paper</h2>
-      
-      {message && <p style={{
-        padding: '1rem',
-        borderRadius: '8px',
-        backgroundColor: message.includes('Error') ? '#fee2e2' : '#dcfce7',
-        color: message.includes('Error') ? '#dc2626' : '#16a34a',
-        marginBottom: '2rem',
-        textAlign: 'center'
-      }}>{message}</p>}
-      
+
+      {/* Update the form container styles */}
       <form onSubmit={handleSubmit} style={{
         background: 'white',
         padding: '2rem',
         borderRadius: '16px',
-        boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
+        boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+        width: '100%',
+        maxWidth: '1600px',
+        margin: '0 auto'
       }}>
         <div style={{ marginBottom: '2rem' }}>
           <input 

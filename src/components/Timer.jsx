@@ -24,7 +24,7 @@ const Timer = ({initialTime, onTimeUp}) => {
       backgroundColor: '#ffffff',
       boxShadow: '0 8px 16px rgba(0,0,0,0.15)',
       display: 'inline-block',
-      border: `2px solid ${time <= 300 ? '#ff4444' : '#2a5298'}`,
+      border: `2px solid ${time <= 60 ? '#ff4444' : '#2a5298'}`,
       transition: 'all 0.3s ease',
       position: 'fixed',
       top: '20px',
@@ -44,7 +44,7 @@ const Timer = ({initialTime, onTimeUp}) => {
         fontSize: '2.5em',
         fontFamily: 'monospace',
         fontWeight: 'bold',
-        color: time <= 300 ? '#ff4444' : '#2a5298',
+        color: time <= 60 ? '#ff4444' : '#2a5298',
         textShadow: '2px 2px 4px rgba(0,0,0,0.1)',
         letterSpacing: '2px'
       }}>

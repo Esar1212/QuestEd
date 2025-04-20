@@ -4,20 +4,28 @@ import { useRouter } from 'next/navigation'
 
 const ExamPapers = () => {
   const [papers, setPapers] = useState([])
+  const [completedPapers, setCompletedPapers] = useState([])
   const router = useRouter()
 
   useEffect(() => {
-    const fetchPapers = async () => {
+    const fetchData = async () => {
       try {
-        const response = await fetch('/api/getPapersByClass')
-        const data = await response.json()
-        setPapers(data)
+        // Fetch papers
+        const papersResponse = await fetch('/api/getPapersByClass')
+        const papersData = await papersResponse.json()
+        setPapers(papersData)
+
+        // Fetch completed papers
+        const solutionsResponse = await fetch('/api/getCompletedPapers')
+        const solutionsData = await solutionsResponse.json()
+        console.log(solutionsData);
+        setCompletedPapers(solutionsData.map(solution => solution.paperId))
       } catch (error) {
-        console.error('Error fetching papers:', error)
+        console.error('Error fetching data:', error)
       }
     }
 
-    fetchPapers()
+    fetchData()
   }, [])
 
   const handlePaperClick = (paperId) => {
@@ -114,6 +122,15 @@ const ExamPapers = () => {
               fontSize: '1.1rem'
             }}>
               <span style={{ color: '#4CAF50' }}>•</span>
+              Your camera will be turned on during the exam, to prevent foulplay
+            </li>
+            <li style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.75rem',
+              fontSize: '1.1rem'
+            }}>
+              <span style={{ color: '#4CAF50' }}>•</span>
               Submit your answers before the timer runs out.
             </li>
             <li style={{
@@ -146,14 +163,14 @@ const ExamPapers = () => {
           {papers.map((paper) => (
             <div 
               key={paper._id}
-              onClick={() => handlePaperClick(paper._id)}
+              onClick={() => !completedPapers.includes(paper._id) && handlePaperClick(paper._id)}
               style={{
                 backgroundColor: 'white',
                 borderRadius: '16px',
                 boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
                 padding: '2rem',
                 transition: 'all 0.3s ease',
-                cursor: 'pointer',
+                cursor: completedPapers.includes(paper._id) ? 'not-allowed' : 'pointer',
                 border: '1px solid rgba(255,255,255,0.1)',
                 background: 'linear-gradient(145deg, #ffffff, #f8f9fa)',
                 position: 'relative',
@@ -221,14 +238,14 @@ const ExamPapers = () => {
                 </p>
                 <br/>
                 <div style={{
-                  background: '#2a5298',
+                  background: completedPapers.includes(paper._id) ? '#666' : '#2a5298',
                   color: 'white',
                   padding: '0.5rem 1rem',
                   borderRadius: '999px',
                   fontSize: '0.9rem',
                   fontWeight: '500'
                 }}>
-                  Start Exam
+                  {completedPapers.includes(paper._id) ? 'Already Completed' : 'Start Exam'}
                 </div>
               </div>
             </div>

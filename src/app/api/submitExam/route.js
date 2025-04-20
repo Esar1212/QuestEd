@@ -4,16 +4,28 @@ import { NextResponse } from "next/server";
 
 export async function POST(req) {
   try {
-    // Connect to database first
     await dbConnect();
     
     const body = await req.json();
     
-    // Validate required fields
     if (!body.studentId || !body.paperId || !body.questions) {
       return NextResponse.json(
         { success: false, error: 'Missing required fields' },
         { status: 400 }
+      );
+    }
+
+    // Check if solution already exists
+    const existingSolution = await Solution.findOne({
+      studentId: body.studentId,
+      paperId: body.paperId,
+      status: 'submitted'
+    });
+
+    if (existingSolution) {
+      return NextResponse.json(
+        { success: false, error: 'Exam already submitted' },
+        { status: 409 }
       );
     }
 

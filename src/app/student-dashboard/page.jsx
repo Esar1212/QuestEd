@@ -316,7 +316,7 @@ export default function StudentDashboard() {
             transition: 'transform 0.3s ease, box-shadow 0.3s ease',
             cursor: 'pointer'
           }}
-          onClick={() => router.push('/results')}
+          onClick={() => router.push('/Results')}
           onMouseEnter={(e) => {
             e.currentTarget.style.transform = 'translateY(-5px)';
             e.currentTarget.style.boxShadow = '0 8px 16px rgba(0,0,0,0.1)';

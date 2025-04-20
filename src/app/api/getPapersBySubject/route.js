@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import dbConnect from "../../../../lib/dbConnect";
-import QuestionPaper from "../../../../models/QuestionPaper";
+import Solution from "../../../../models/Solution";
 import { headers } from 'next/headers';
 
 export async function GET(request) {
@@ -26,8 +26,8 @@ export async function GET(request) {
     await dbConnect();
 
     // Query papers for the specific subject
-    const papers = await QuestionPaper.find({ 
-      subject: authData.subject 
+    const papers = await Solution.find({ 
+      subject: authData.subject
     }).sort({ createdAt: -1 });
 
     return NextResponse.json(papers);
