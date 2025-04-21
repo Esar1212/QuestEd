@@ -35,9 +35,13 @@ export default function LoginForm({ defaultUserType = 'student' }: LoginFormProp
     return Object.keys(newErrors).length === 0;
   };
 
+  // Add loading state near other state declarations
+  const [isLoading, setIsLoading] = useState(false);
+
   const handleSubmit = async(e: React.FormEvent) => {
     e.preventDefault();
     if (validateForm()) {
+      setIsLoading(true); // Set loading to true when starting login
       try {
         const response = await fetch('/api/login', {
           method: 'POST',
@@ -55,7 +59,6 @@ export default function LoginForm({ defaultUserType = 'student' }: LoginFormProp
         const data = await response.json();
         
         if (data.success) {
-          // Redirect based on user type
           const dashboardPath = userType === 'student' ? '/student-dashboard' : '/teacher-dashboard';
           router.push(dashboardPath);
         } else {
@@ -67,9 +70,21 @@ export default function LoginForm({ defaultUserType = 'student' }: LoginFormProp
       } catch (error) {
         console.error('Login error:', error);
         alert('Login failed. Please try again.');
+      } finally {
+        setIsLoading(false); // Reset loading state regardless of outcome
       }
     }
   };
+
+  // Update the submit button
+  <button 
+    type="submit" 
+    className="register-button"
+    disabled={isLoading}
+  >
+    <i className="fas fa-sign-in-alt"></i>
+    {isLoading ? "Logging in..." : `Login as ${userType}`}
+  </button>
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;

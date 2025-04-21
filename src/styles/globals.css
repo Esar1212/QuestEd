@@ -1427,3 +1427,204 @@ body {
     padding: 0.5rem 1rem;
   }
 }
+
+/* ... existing root variables ... */
+
+/* Base responsive container */
+.container {
+  max-width: 1400px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  margin-top: 4rem;
+  background: #1a1a1a;
+}
+
+/* Responsive Grid Layouts */
+.grid-container {
+  display: grid;
+  gap: 2rem;
+  grid-template-columns: repeat(12, 1fr);
+}
+
+/* Large screens (1200px and up) */
+@media (min-width: 1200px) {
+  .container {
+    padding: 0 2rem;
+  }
+
+  .exam-list {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .footer-content {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* Medium screens (768px to 1199px) */
+@media (max-width: 1199px) {
+  .container {
+    padding: 0 1.5rem;
+  }
+
+  .exam-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .hero-section {
+    padding: 4rem 1.5rem 3rem;
+  }
+
+  .hero-title {
+    font-size: 2.8rem;
+  }
+
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .footer-content {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Small screens (up to 767px) */
+@media (max-width: 767px) {
+  .container {
+    padding: 0 1rem;
+  }
+
+  .exam-list {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-section {
+    padding: 3rem 1rem 2rem;
+  }
+
+  .hero-title {
+    font-size: 2rem;
+  }
+
+  .hero-subtitle {
+    font-size: 1rem;
+  }
+
+  .hero-buttons {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .hero-stats {
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .nav-brand {
+    font-size: 1.2rem;
+  }
+
+  .nav-links {
+    display: none;
+  }
+
+  .main-nav {
+    padding: 0.75rem 1rem;
+  }
+
+  .exam-card {
+    padding: 1.5rem;
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .footer-content {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .footer {
+    padding: 3rem 1rem 1.5rem;
+  }
+}
+
+/* Extra small screens (up to 480px) */
+@media (max-width: 480px) {
+  .container {
+    padding: 0 0.75rem;
+  }
+
+  .hero-title {
+    font-size: 1.75rem;
+  }
+
+  .exam-card {
+    padding: 1.25rem;
+  }
+
+  .exam-card h3 {
+    font-size: 1.2rem;
+  }
+
+  .footer-section h3 {
+    font-size: 1.1rem;
+  }
+
+  .social-links {
+    flex-direction: column;
+  }
+}
+
+/* Responsive Typography */
+@media (max-width: 1199px) {
+  html {
+    font-size: 95%;
+  }
+}
+
+@media (max-width: 767px) {
+  html {
+    font-size: 90%;
+  }
+}
+
+/* Responsive Images */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Responsive Tables */
+.table-responsive {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Responsive Forms */
+@media (max-width: 767px) {
+  .form-group {
+    margin-bottom: 1rem;
+  }
+
+  input, select, textarea {
+    font-size: 16px; /* Prevents zoom on iOS */
+  }
+
+  .register-card, .login-card {
+    padding: 1.5rem;
+  }
+}
+
+/* Touch-friendly interactions */
+@media (hover: none) {
+  .nav-link:hover {
+    background: none;
+  }
+
+  .button:hover {
+    transform: none;
+  }
+}
