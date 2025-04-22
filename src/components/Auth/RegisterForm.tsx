@@ -12,6 +12,7 @@ export default function RegisterForm({ defaultUserType = 'student' }: RegisterFo
   const router = useRouter();
   const [userType, setUserType] = useState<'student' | 'teacher'>(defaultUserType);
   const [isCollegeStudent, setIsCollegeStudent] = useState(false);
+  const [isLoading,setIsLoading]=useState(false);
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
@@ -94,7 +95,7 @@ export default function RegisterForm({ defaultUserType = 'student' }: RegisterFo
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (validateForm()) {
-
+         setIsLoading(true);
         // Prepare the request data based on user type
         const requestData = {
           userType,
@@ -162,6 +163,8 @@ export default function RegisterForm({ defaultUserType = 'student' }: RegisterFo
         setErrors({
           submit: error instanceof Error ? error.message : 'Registration failed'
         });
+      }finally{
+        setIsLoading(false);
       }
     }
   };
@@ -322,16 +325,23 @@ export default function RegisterForm({ defaultUserType = 'student' }: RegisterFo
                 <>
                   <div className="form-group">
             <div className="input-group">
-              <input
-                type="text"
-                name="stream"
-                pattern="[a-zA-Z\s]+"
-                placeholder="Stream"
-                value={formData.stream}
-                onChange={handleChange}
-                className={errors.stream ? 'error' : ''}
-              />
-              <i className="fas fa-stream"></i>
+            <select
+                        name="stream"
+                        value={formData.stream}
+                        onChange={handleChange}
+                        className={errors.stream ? 'error' : ''}
+                      >
+                        <option value="">Select an Engineering Stream</option>
+                        <option value="CSE">CSE</option>
+                        <option value="ECE">ECE</option>
+                        <option value="ME">ME</option>
+                        <option value="IT">IT</option>
+                        <option value="ChE">ChE</option>
+                        <option value="CE">CE</option>
+                        <option value="EE">EE</option>
+                        <option value="AEIE">AEIE</option>
+
+                      </select>
             </div>
             {errors.stream && <span className="error-message">{errors.stream}</span>}
           </div>
@@ -418,9 +428,9 @@ export default function RegisterForm({ defaultUserType = 'student' }: RegisterFo
             <div className="error-message text-center">{errors.submit}</div>
           )}
 
-          <button type="submit" className="register-button">
+          <button type="submit" className="register-button" disabled={isLoading}>
             <i className="fas fa-user-plus"></i>
-            Register as {userType}
+            { isLoading? "Registering...": `Register as ${userType}`}
           </button>
 
           <div className="login-link">
