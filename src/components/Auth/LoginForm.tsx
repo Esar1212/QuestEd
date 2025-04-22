@@ -17,6 +17,7 @@ export default function LoginForm({ defaultUserType = 'student' }: LoginFormProp
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
@@ -75,16 +76,7 @@ export default function LoginForm({ defaultUserType = 'student' }: LoginFormProp
       }
     }
   };
-
-  // Update the submit button
-  <button 
-    type="submit" 
-    className="register-button"
-    disabled={isLoading}
-  >
-    <i className="fas fa-sign-in-alt"></i>
-    {isLoading ? "Logging in..." : `Login as ${userType}`}
-  </button>
+  
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -166,9 +158,9 @@ export default function LoginForm({ defaultUserType = 'student' }: LoginFormProp
             {errors.password && <span className="error-message">{errors.password}</span>}
           </div>
 
-          <button type="submit" className="register-button">
+          <button type="submit" className="register-button" disabled={isLoading}>
             <i className="fas fa-sign-in-alt"></i>
-            Login as {userType}
+            {isLoading? "Logging in...": {`Login as ${userType}`}}
           </button>
 
           <div className="login-link">
