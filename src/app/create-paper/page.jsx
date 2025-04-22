@@ -16,12 +16,30 @@ const CreateQuestionPaper = () => {
    const router= useRouter();
   // Update the addQuestion function to include marks
   const addQuestion = () => {
+    const currentTotalMarks = calculateTotalQuestionMarks();
+    const remainingMarks = parseInt(totalMarks) - currentTotalMarks;
+
+    if (questions.length > 0) {
+      const lastQuestion = questions[questions.length - 1];
+      if (!lastQuestion.options.includes(lastQuestion.answer)) {
+        alert("The correct answer must match one of the options in the previous question!");
+        return;
+      }
+    }
+    
+    if (remainingMarks <= 0) {
+      alert("Cannot add more questions. Total marks limit reached!");
+      return;
+    }
     setQuestions([...questions, { 
       question: "", 
       options: ["", "", "", ""], 
       answer: "", 
       marks: "" 
     }]);
+  };
+  const calculateTotalQuestionMarks = () => {
+    return questions.reduce((sum, q) => sum + (parseInt(q.marks) || 0), 0);
   };
 
   const updateQuestion = (index, key, value) => {
@@ -38,6 +56,21 @@ const CreateQuestionPaper = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const currentTotalMarks = calculateTotalQuestionMarks();
+    const remainingMarks = parseInt(totalMarks) - currentTotalMarks;
+
+    if (questions.length > 0) {
+      const lastQuestion = questions[questions.length - 1];
+      if (!lastQuestion.options.includes(lastQuestion.answer)) {
+        alert("The correct answer must match one of the options in the previous question!");
+        return;
+      }
+    }
+    
+    if (remainingMarks > 0) {
+      alert("Cannot submit the question paper! Please add more questions to reach the total marks limit!");
+      return;
+    }
     setLoading(true);
     setMessage("");
 
@@ -129,6 +162,7 @@ const CreateQuestionPaper = () => {
         margin: '0 auto'
       }}>
         <div style={{ marginBottom: '2rem' }}>
+          Exam Title:
           <input 
             type="text" 
             placeholder="Exam Title" 
@@ -143,7 +177,8 @@ const CreateQuestionPaper = () => {
               border: '1px solid #e5e7eb',
               fontSize: '1rem'
             }}
-          />
+          /> 
+          Your Subject:
           <input 
             type="text" 
             value={subject} 
@@ -159,10 +194,11 @@ const CreateQuestionPaper = () => {
               fontSize: '1rem'
             }}
           />
+           Class or Stream:
           <input 
             type="text" 
             value={classStream} 
-            placeholder="Class or Stream" 
+            placeholder="Please enter the class or the engineering stream in abbreviation" 
             onChange={(e) => setClassStream(e.target.value)} 
             required
             style={{
@@ -174,27 +210,31 @@ const CreateQuestionPaper = () => {
               fontSize: '1rem'
             }}
           />
-           <input 
+          Total Marks:
+          <input 
             type="number" 
-            value={totalMarks}
-            min="1"
-            placeholder="Enter total marks in this paper" 
+            min="0"
+            placeholder="Enter the total marks in this question paper" 
+            value={totalMarks} 
+            onWheel={(e) => e.target.blur()}
             onChange={(e) => setTotalMarks(e.target.value)} 
             required
             style={{
               width: '100%',
               padding: '0.75rem',
-              marginBottom: '1rem',
               borderRadius: '8px',
               border: '1px solid #e5e7eb',
               fontSize: '1rem'
             }}
           />
+         
+           Time Limit:
           <input 
             type="number" 
-            min="0"
+            min="1"
             placeholder="Time Limit (minutes)" 
             value={timeLimit} 
+            onWheel={(e) => e.target.blur()}
             onChange={(e) => setTimeLimit(e.target.value)} 
             required
             style={{
@@ -220,6 +260,7 @@ const CreateQuestionPaper = () => {
             borderRadius: '12px',
             marginBottom: '1.5rem'
           }}>
+             Question:
             <input 
               type="text" 
               placeholder="Enter Question" 
@@ -235,6 +276,7 @@ const CreateQuestionPaper = () => {
                 fontSize: '1rem'
               }}
             />
+            Options:
             {q.options.map((opt, optIndex) => (
               <input 
                 key={optIndex} 
@@ -257,6 +299,7 @@ const CreateQuestionPaper = () => {
                 }}
               />
             ))}
+             Type the correct answer here:
             <input 
               type="text" 
               placeholder="Correct Answer" 
@@ -272,10 +315,13 @@ const CreateQuestionPaper = () => {
                 backgroundColor: '#f0fdf4'
               }}
             />
+                Marks allotted:
                 <input 
                   type="number" 
                   placeholder="Enter marks for this question" 
-                  value={q.marks} 
+                  value={q.marks}
+                  min='1' 
+                  onWheel={(e) => e.target.blur()}
                   onChange={(e) => updateQuestion(index, "marks", e.target.value)}
                   required
                   style={{
@@ -320,6 +366,7 @@ const CreateQuestionPaper = () => {
           <button 
             type="button" 
             onClick={addQuestion}
+    
             style={{
               padding: '0.75rem 1.5rem',
               borderRadius: '8px',
