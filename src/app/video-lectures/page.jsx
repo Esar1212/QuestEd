@@ -70,7 +70,7 @@ export default function VideoLectures() {
         <div style={{
             padding: '6rem 2rem 2rem 2rem',
             minHeight: '100vh',
-            background: 'linear-gradient(135deg, #1a1a1a 0%, #2c2c2c 100%)'
+            background: 'linear-gradient(135deg, #5152d 5%, #0b1727 100%)'
         }}>
             {isSearching ? (
                 <div style={{

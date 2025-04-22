@@ -285,7 +285,7 @@ export default function TeacherDashboard() {
               <span style={{
                 width: '8px',
                 height: '8px',
-                background: '#2a5298',
+                background: '#34D399',
                 borderRadius: '50%',
                 display: 'inline-block'
               }} />
@@ -802,7 +802,7 @@ export default function TeacherDashboard() {
               <span style={{
                 width: '12px',
                 height: '12px',
-                background: '#2a5298',
+                background: '#ef4444',
                 borderRadius: '50%',
                 display: 'inline-block',
                 marginLeft: '1rem'
