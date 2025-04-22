@@ -11,6 +11,7 @@ export default function Page() {
     const [examData, setExamData] = useState(null);
     const [tabChangeCount, setTabChangeCount] = useState(0);
     const [showWarning, setShowWarning] = useState(false);
+    const [isLoading,setIsLoading]= useState(false);
 
     const handleSubmit = useCallback(async () => {
         try {
@@ -18,6 +19,7 @@ export default function Page() {
                 console.error('Exam data not loaded yet');
                 return;
             }
+            setIsLoading(true);
 
             const id = localStorage.getItem("selectedPaperId");
             const userId = localStorage.getItem("userId");
@@ -84,6 +86,8 @@ export default function Page() {
         } catch (error) {
             console.error('Submit failed:', error);
             alert('Failed to submit exam. Please try again.');
+        }finally{
+            setIsLoading(false);
         }
     }, [examData, questions, answers, router]);
 
@@ -256,168 +260,86 @@ export default function Page() {
 
     return (
         <div style={{
+            paddingTop: '10rem',
             minHeight: '100vh',
-            background: 'linear-gradient(135deg, #f6f8fc 0%, #e9ecef 100%)',
-            padding: '6rem 2rem 2rem 2rem',
-            position: 'relative'
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            background: '#f5f5f5',
+            padding: '3rem 2rem 2rem 2rem'
         }}>
             {showWarning && <WarningMessage />}
             
             <div style={{
                 position: 'fixed',
-                top: '4.5rem',
+                top: '10rem', // Adjusted timer position
                 right: '2rem',
-                zIndex: 1000,
-                background: 'rgba(255, 255, 255, 0.95)',
-                padding: '0.4rem 0.75rem',
-                borderRadius: '8px',
-                boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
-                backdropFilter: 'blur(10px)',
-                border: '1px solid rgba(42,82,152,0.1)',
-                fontSize: '0.9rem',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '0.4rem'
+                zIndex: 1000
             }}>
-                <span style={{ 
-                    fontSize: '0.9rem',
-                    opacity: 0.8,
-                    color: '#2a5298'
-                }}>⏱️</span>
-                <div style={{
-                    fontWeight: '500',
-                    color: '#2a5298'
-                }}>
-                    <Timer 
-                        initialTime={calculateRemainingTime()} 
-                        onTimeUp={handleSubmit}
-                    />
-                </div>
+               
+               <Timer 
+                    initialTime={calculateRemainingTime()} 
+                    onTimeUp={handleSubmit}
+                />
             </div>
 
             <div style={{
-                maxWidth: '900px',
+                maxWidth: '800px',
                 width: '100%',
-                margin: '0 auto',
                 background: 'white',
-                padding: '2.5rem',
-                borderRadius: '20px',
-                boxShadow: '0 10px 40px rgba(0,0,0,0.08)',
-                border: '1px solid rgba(42,82,152,0.1)'
+                padding: '2rem',
+                borderRadius: '8px',
+                boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+                marginTop: '0' // Removed margin top since we increased padding
             }}>
                 <h1 style={{
-                    fontSize: '2rem',
-                    marginBottom: '2.5rem',
+                    fontSize: '1.8rem',
+                    marginBottom: '2rem',
                     color: '#2a5298',
                     textAlign: 'center',
-                    fontWeight: '700',
+                    padding: '0.5rem',
                     position: 'relative',
-                    paddingBottom: '1rem'
+                    fontWeight: 'bolder' // Added position relative
                 }}>
                     {examData?.title} Examination
-                    <div style={{
-                        content: '""',
-                        position: 'absolute',
-                        bottom: 0,
-                        left: '50%',
-                        transform: 'translateX(-50%)',
-                        width: '80px',
-                        height: '4px',
-                        background: 'linear-gradient(90deg, #2a5298, #4CAF50)',
-                        borderRadius: '2px'
-                    }} />
                 </h1>
 
                 {questions.map((question, index) => (
                     <div key={question._id} style={{
-                        marginBottom: '2.5rem',
-                        padding: '1.5rem',
-                        background: '#ffffff',
+                        marginBottom: '2rem',
+                        padding: '1rem',
                         border: '1px solid #e5e7eb',
-                        borderRadius: '16px',
-                        boxShadow: '0 4px 20px rgba(0,0,0,0.03)',
-                        transition: 'all 0.3s ease'
+                        borderRadius: '8px'
                     }}>
-                        <div style={{
-                            display: 'flex',
-                            alignItems: 'flex-start',
-                            gap: '1rem',
-                            marginBottom: '1.5rem'
+                        <p style={{
+                            fontSize: '1.1rem',
+                            marginBottom: '1rem',
+                            color: '#1f2937'
                         }}>
-                            <div style={{
-                                background: '#2a5298',
-                                color: 'white',
-                                width: '32px',
-                                height: '32px',
-                                borderRadius: '50%',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
+                            <strong>{index + 1}. </strong>
+                            {question.question}
+                            <span style={{
+                                marginLeft: '0.5rem',
                                 fontSize: '0.9rem',
-                                fontWeight: '600',
-                                flexShrink: 0
+                                color: '#6b7280'
                             }}>
-                                {index + 1}
-                            </div>
-                            <div style={{ flex: 1 }}>
-                                <p style={{
-                                    fontSize: '1.1rem',
-                                    color: '#1f2937',
-                                    lineHeight: '1.5',
-                                    fontWeight: '500'
-                                }}>
-                                    {question.question}
-                                </p>
-                                <span style={{
-                                    display: 'inline-block',
-                                    padding: '0.25rem 0.75rem',
-                                    background: 'rgba(42,82,152,0.1)',
-                                    color: '#2a5298',
-                                    borderRadius: '999px',
-                                    fontSize: '0.85rem',
-                                    fontWeight: '500',
-                                    marginTop: '0.75rem'
-                                }}>
-                                    {question.marks} marks
-                                </span>
-                            </div>
-                        </div>
+                                ({question.marks} marks)
+                            </span>
+                        </p>
 
-                        <div style={{ 
-                            marginLeft: '3rem',
-                            display: 'grid',
-                            gap: '0.75rem'
-                        }}>
+                        <div style={{ marginLeft: '1.5rem' }}>
                             {question.options.map((option, optIndex) => (
                                 <label key={optIndex} style={{
                                     display: 'flex',
                                     alignItems: 'center',
+                                    marginBottom: '0.75rem',
                                     padding: '0.75rem 1rem',
-                                    borderRadius: '12px',
+                                    borderRadius: '8px',
                                     cursor: 'pointer',
-                                    background: answers[question._id] === option 
-                                        ? 'rgba(42,82,152,0.08)'
-                                        : 'white',
-                                    border: '1px solid',
-                                    borderColor: answers[question._id] === option 
-                                        ? '#2a5298'
-                                        : '#e5e7eb',
+                                    backgroundColor: answers[question._id] === option ? '#e8f0fe' : 'white',
+                                    border: '1px solid #e5e7eb',
                                     transition: 'all 0.2s ease',
-                                    userSelect: 'none',
-                                    position: 'relative',
-                                    overflow: 'hidden'
-                                }}
-                                onMouseEnter={(e) => {
-                                    if (answers[question._id] !== option) {
-                                        e.currentTarget.style.borderColor = '#2a5298';
-                                        e.currentTarget.style.background = 'rgba(42,82,152,0.02)';
-                                    }
-                                }}
-                                onMouseLeave={(e) => {
-                                    if (answers[question._id] !== option) {
-                                        e.currentTarget.style.borderColor = '#e5e7eb';
-                                        e.currentTarget.style.background = 'white';
-                                    }
+                                    userSelect: 'none'
                                 }}
                                 onClick={() => handleOptionSelect(question._id, option)}
                                 >
@@ -426,26 +348,15 @@ export default function Page() {
                                         name={`question-${question._id}`}
                                         value={option}
                                         checked={answers[question._id] === option}
-                                        onChange={() => {}}
+                                        onChange={() => {}} // Empty onChange to avoid React warning
                                         style={{ 
                                             marginRight: '1rem',
-                                            width: '20px',
-                                            height: '20px',
                                             cursor: 'pointer',
-                                            accentColor: '#2a5298'
+                                            width: '18px',
+                                            height: '18px'
                                         }}
                                     />
-                                    <span style={{
-                                        fontSize: '1rem',
-                                        color: answers[question._id] === option 
-                                            ? '#2a5298'
-                                            : '#4b5563',
-                                        fontWeight: answers[question._id] === option 
-                                            ? '500'
-                                            : 'normal'
-                                    }}>
-                                        {option}
-                                    </span>
+                                    <span>{option}</span>
                                 </label>
                             ))}
                         </div>
@@ -454,35 +365,24 @@ export default function Page() {
 
                 <button
                     onClick={handleSubmit}
+                    disabled={isLoading}
                     style={{
-                        background: 'linear-gradient(135deg, #2a5298, #1e3c72)',
+                        background: '#2a5298',
                         color: 'white',
-                        padding: '1rem 2rem',
-                        borderRadius: '12px',
+                        padding: '0.75rem 1.5rem',
+                        borderRadius: '6px',
                         border: 'none',
                         cursor: 'pointer',
-                        fontSize: '1.1rem',
-                        fontWeight: '600',
+                        fontSize: '1rem',
                         width: '100%',
                         marginTop: '2rem',
-                        transition: 'all 0.3s ease',
-                        boxShadow: '0 4px 15px rgba(42,82,152,0.2)',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        gap: '0.75rem'
-                    }}
-                    onMouseEnter={(e) => {
-                        e.currentTarget.style.transform = 'translateY(-2px)';
-                        e.currentTarget.style.boxShadow = '0 8px 25px rgba(42,82,152,0.25)';
-                    }}
-                    onMouseLeave={(e) => {
-                        e.currentTarget.style.transform = 'translateY(0)';
-                        e.currentTarget.style.boxShadow = '0 4px 15px rgba(42,82,152,0.2)';
+                        transition: 'background-color 0.2s',
+                        ':hover': {
+                            backgroundColor: '#1e3c72'
+                        }
                     }}
                 >
-                    <span style={{ fontSize: '1.2rem' }}>📝</span>
-                    Submit Exam
+                    {isLoading?"Submitting...":"Submit"}
                 </button>
             </div>
         </div>
