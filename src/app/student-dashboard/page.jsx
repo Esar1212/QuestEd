@@ -103,6 +103,7 @@ export default function StudentDashboard() {
   }
 
   return (
+    <>
     <Head>
         <meta name="google" content="notranslate" />
         <meta name="robots" content="noindex,nofollow" />
@@ -977,6 +978,7 @@ export default function StudentDashboard() {
         }
       `}</style>
     </div>
+    </>
   );
 }
      
