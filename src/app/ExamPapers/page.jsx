@@ -158,86 +158,135 @@ const ExamPapers = () => {
               onClick={() => !completedPapers.includes(paper._id) && handlePaperClick(paper._id)}
               style={{
                 backgroundColor: 'white',
-                borderRadius: '16px',
-                boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
+                borderRadius: '20px',
+                boxShadow: '0 10px 30px rgba(0,0,0,0.1)',
                 padding: '2rem',
-                transition: 'all 0.3s ease',
+                transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
                 cursor: completedPapers.includes(paper._id) ? 'not-allowed' : 'pointer',
                 border: '1px solid rgba(255,255,255,0.1)',
-                background: 'linear-gradient(145deg, #ffffff, #f8f9fa)',
+                background: completedPapers.includes(paper._id) 
+                  ? 'linear-gradient(145deg, #f8f9fa, #e9ecef)'
+                  : 'linear-gradient(145deg, #ffffff, #f8f9fa)',
                 position: 'relative',
-                overflow: 'hidden'
+                overflow: 'hidden',
+                backdropFilter: 'blur(10px)',
+                WebkitBackdropFilter: 'blur(10px)'
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.transform = 'translateY(-10px)';
-                e.currentTarget.style.boxShadow = '0 8px 16px rgba(0,0,0,0.2)';
+                if (!completedPapers.includes(paper._id)) {
+                  e.currentTarget.style.transform = 'translateY(-10px) scale(1.02)';
+                  e.currentTarget.style.boxShadow = '0 20px 40px rgba(0,0,0,0.15)';
+                }
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.transform = 'translateY(0)';
-                e.currentTarget.style.boxShadow = '0 4px 6px rgba(0,0,0,0.1)';
+                e.currentTarget.style.transform = 'translateY(0) scale(1)';
+                e.currentTarget.style.boxShadow = '0 10px 30px rgba(0,0,0,0.1)';
               }}
             >
-              <h2 style={{
-                fontSize: '1.8rem',
-                marginBottom: '1.5rem',
-                color: '#2a5298',
-                fontWeight: '700',
-                borderBottom: '2px solid #e5e7eb',
-                paddingBottom: '0.75rem'
-              }}>
-                {paper.title}
-              </h2>
-              <p style={{
-                color: '#4a5568',
-                marginBottom: '1rem',
-                fontSize: '1.1rem',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '0.5rem'
-              }}>
-                <span style={{ fontWeight: '600' }}>Subject:</span> {paper.subject}
-              </p>
+              {/* Decorative gradient overlay */}
               <div style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                marginTop: '1.5rem',
-                padding: '1rem',
-                background: '#f8fafc',
-                borderRadius: '8px'
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                right: 0,
+                height: '4px',
+                background: completedPapers.includes(paper._id)
+                  ? 'linear-gradient(90deg, #6c757d, #adb5bd)'
+                  : 'linear-gradient(90deg, #2a5298, #4CAF50)',
+                opacity: 0.8
+              }} />
+
+              {/* Card content */}
+              <div style={{
+                position: 'relative',
+                zIndex: 1
               }}>
-                <p style={{
-                  color: '#4a5568',
-                  fontSize: '1rem',
-                  fontWeight: '500'
+                <h3 style={{
+                  fontSize: '1.5rem',
+                  fontWeight: '600',
+                  color: completedPapers.includes(paper._id) ? '#6c757d' : '#2a5298',
+                  marginBottom: '1.5rem',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.75rem'
                 }}>
-                  Questions: {paper.questions.length}
-                </p>
-                <p style={{
-                  color: '#4a5568',
-                  fontSize: '1rem',
-                  fontWeight: '500'
-                }}>
-                  Total Marks: {paper.totalMarks}
-                </p>
-                <br/>
-                <p style={{
-                  color: '#4a5568',
-                  fontSize: '1rem',
-                  fontWeight: '500'
-                }}>
-                  Time Limit: {paper.timeLimit} min
-                </p>
-                <br/>
+                  <span style={{
+                    fontSize: '1.75rem',
+                    opacity: 0.9
+                  }}>
+                    {completedPapers.includes(paper._id) ? '✓' : '📝'}
+                  </span>
+                  {paper.title}
+                </h3>
+
                 <div style={{
-                  background: completedPapers.includes(paper._id) ? '#666' : '#2a5298',
-                  color: 'white',
-                  padding: '0.5rem 1rem',
-                  borderRadius: '999px',
-                  fontSize: '0.9rem',
-                  fontWeight: '500'
+                  display: 'grid',
+                  gap: '1rem',
+                  marginBottom: '1.5rem'
                 }}>
-                  {completedPapers.includes(paper._id) ? 'Already Completed' : 'Start Exam'}
+                  <p style={{
+                    color: '#4a5568',
+                    fontSize: '1rem',
+                    fontWeight: '500',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.5rem'
+                  }}>
+                    <span style={{ opacity: 0.7 }}>❓</span>
+                    Questions: {paper.questions.length}
+                  </p>
+                  <p style={{
+                    color: '#4a5568',
+                    fontSize: '1rem',
+                    fontWeight: '500',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.5rem'
+                  }}>
+                    <span style={{ opacity: 0.7 }}>🎯</span>
+                    Total Marks: {paper.totalMarks}
+                  </p>
+                  <p style={{
+                    color: '#4a5568',
+                    fontSize: '1rem',
+                    fontWeight: '500',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.5rem'
+                  }}>
+                    <span style={{ opacity: 0.7 }}>⏱️</span>
+                    Time Limit: {paper.timeLimit} min
+                  </p>
+                </div>
+
+                <div style={{
+                  background: completedPapers.includes(paper._id)
+                    ? 'linear-gradient(145deg, #6c757d, #adb5bd)'
+                    : 'linear-gradient(145deg, #2a5298, #4CAF50)',
+                  color: 'white',
+                  padding: '0.75rem 1.5rem',
+                  borderRadius: '999px',
+                  fontSize: '0.95rem',
+                  fontWeight: '600',
+                  textAlign: 'center',
+                  transition: 'all 0.3s ease',
+                  boxShadow: '0 4px 15px rgba(0,0,0,0.1)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '0.5rem'
+                }}>
+                  {completedPapers.includes(paper._id) ? (
+                    <>
+                      <span style={{ opacity: 0.9 }}>✓</span>
+                      Already Completed
+                    </>
+                  ) : (
+                    <>
+                      <span style={{ opacity: 0.9 }}>🚀</span>
+                      Start Exam
+                    </>
+                  )}
                 </div>
               </div>
             </div>
