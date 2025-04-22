@@ -37,7 +37,6 @@ export default function LoginForm({ defaultUserType = 'student' }: LoginFormProp
   };
 
   // Add loading state near other state declarations
-  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async(e: React.FormEvent) => {
     e.preventDefault();
@@ -160,7 +159,7 @@ export default function LoginForm({ defaultUserType = 'student' }: LoginFormProp
 
           <button type="submit" className="register-button" disabled={isLoading}>
             <i className="fas fa-sign-in-alt"></i>
-            {isLoading? "Logging in...": {`Login as ${userType}`}}
+           {isLoading ? "Logging in..." : `Login as ${userType}`}
           </button>
 
           <div className="login-link">
