@@ -97,13 +97,17 @@ body {
 
 .password-toggle {
   position: absolute;
-  right: 1rem;
-  color: #a0aec0;
-  font-size: 1rem;
-  cursor: pointer;
+  left: 15px;
   background: none;
   border: none;
-  padding: 0;
+  color: #90a4ae;
+  cursor: pointer;
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  z-index: 2;
 }
 
 .password-toggle:hover {
@@ -173,3 +177,139 @@ body {
 .grades table { width: 100%; border-collapse: collapse; }
 
 .grades th, .grades td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+
+/* Exam List Styles */
+.exam-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  padding: 2rem;
+  background-color: transparent;
+}
+
+.exam-card {
+  background: #ffffff;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.exam-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+}
+
+.exam-card h3 {
+  color: #1a1a1a;
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.exam-card p {
+  color: #4a5568;
+  margin-bottom: 0.5rem;
+}
+
+.start-exam-btn {
+  background-color: #4299e1;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  border: none;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  width: 100%;
+  margin-top: 1rem;
+}
+
+.start-exam-btn:hover {
+  background-color: #3182ce;
+}
+
+/* Footer Styles */
+.footer {
+  background-color: #1a202c;
+  color: #e2e8f0;
+  padding: 4rem 0 2rem;
+  margin-top: 4rem;
+}
+
+.footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  padding: 0 2rem;
+}
+
+.footer-section h3 {
+  color: #fff;
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+}
+
+.footer-section p {
+  color: #a0aec0;
+  line-height: 1.6;
+}
+
+.footer-section ul {
+  list-style: none;
+  padding: 0;
+}
+
+.footer-section ul li {
+  margin-bottom: 0.75rem;
+}
+
+.footer-section ul li a {
+  color: #a0aec0;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.footer-section ul li a:hover {
+  color: #fff;
+}
+
+.contact-info li {
+  color: #a0aec0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.social-links {
+  display: flex;
+  gap: 1rem;
+}
+
+.social-link {
+  color: #a0aec0;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: color 0.2s;
+}
+
+.social-link:hover {
+  color: #fff;
+}
+
+.footer-bottom {
+  text-align: center;
+  padding-top: 2rem;
+  margin-top: 2rem;
+  border-top: 1px solid #2d3748;
+}
+
+.footer-bottom p {
+  color: #a0aec0;
+}

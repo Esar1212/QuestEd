@@ -879,7 +879,7 @@ body {
 
 .password-toggle {
   position: absolute;
-  left: 0.75rem;
+  left: 0px;
   background: none;
   border: none;
   color: #90a4ae;

@@ -4,7 +4,7 @@ import ExamList from '@/components/Exam/ExamList';
 export default function Home() {
   return (
     <div className="container" style={{ 
-      backgroundColor: 'black', 
+      backgroundColor: '#0a0f1c', 
       minHeight: '100vh', 
       color: 'white',
       width: '100%',
@@ -46,15 +46,6 @@ export default function Home() {
           </div>
         </div>
       </header>
-
-      <nav className="navigation">
-        <Link href="/login" className="nav-link">
-          Login
-        </Link>
-        <Link href="/register" className="nav-link">
-          Register
-        </Link>
-      </nav>
 
       <section className="exam-section">
         <h2>Available Exams</h2>
