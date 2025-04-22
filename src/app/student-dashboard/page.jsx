@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import LoadingSpinner from '@/components/LoadingSpinner';
 import ErrorDisplay from '@/components/ErrorDisplay';
 import { FiLogOut } from 'react-icons/fi';
+import Head from 'next/head';
 
 export default function StudentDashboard() {
   const [userData, setUserData] = useState(null);
@@ -102,6 +103,11 @@ export default function StudentDashboard() {
   }
 
   return (
+    <Head>
+        <meta name="google" content="notranslate" />
+        <meta name="robots" content="noindex,nofollow" />
+        <meta name="autocomplete" content="off" />
+      </Head>
     <div className="container-fluid" style={{ 
       paddingTop: '4rem',
       paddingLeft: '1.5rem',
