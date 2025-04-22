@@ -70,22 +70,25 @@ export default function VideoLectures() {
         <div style={{
             padding: '6rem 2rem 2rem 2rem',
             minHeight: '100vh',
-            background: 'linear-gradient(135deg, #1a1a1a 0%, #2c2c2c 100%)'
+            background: 'linear-gradient(135deg, #5152d 5%, #0b1727 100%)'
         }}>
             {isSearching ? (
                 <div style={{
                     maxWidth: '600px',
                     margin: '0 auto',
                     padding: '2rem',
-                    background: 'rgba(255, 255, 255, 0.95)',
+                    background: 'rgba(230, 240, 247, 0.88)',
                     borderRadius: '16px',
-                    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.2)'
+                    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.2)',
+                    display: 'flex',
+                    align-items: 'center'
                 }}>
                     <h2 style={{
                         color: '#2a5298',
                         fontSize: '1.8rem',
                         textAlign: 'center',
-                        marginBottom: '2rem'
+                        marginBottom: '2rem',
+                        font-weight: '600'
                     }}>Find Your Video Lecture</h2>
                     
                     <div style={{ marginBottom: '1.5rem' }}>
@@ -93,7 +96,8 @@ export default function VideoLectures() {
                             display: 'block',
                             color: '#444',
                             marginBottom: '0.5rem',
-                            fontSize: '1rem'
+                            fontSize: '1rem',
+                            font-weight: '500'
                         }}>Which teacher's uploaded video you want to watch?</label>
                         <input
                             type="text"
@@ -103,7 +107,7 @@ export default function VideoLectures() {
                                 width: '100%',
                                 padding: '1rem',
                                 borderRadius: '8px',
-                                border: '2px solid #ddd',
+                                border: '2px solid #818184',
                                 fontSize: '1rem',
                                 transition: 'border-color 0.3s ease',
                                 ':focus': {
@@ -120,7 +124,8 @@ export default function VideoLectures() {
                             display: 'block',
                             color: '#444',
                             marginBottom: '0.5rem',
-                            fontSize: '1rem'
+                            fontSize: '1rem',
+                            font-weight: '500'
                         }}>Which video do you want to watch?</label>
                         <input
                             type="text"
@@ -130,7 +135,7 @@ export default function VideoLectures() {
                                 width: '100%',
                                 padding: '1rem',
                                 borderRadius: '8px',
-                                border: '2px solid #ddd',
+                                border: '2px solid #818184',
                                 fontSize: '1rem',
                                 transition: 'border-color 0.3s ease',
                                 ':focus': {
