@@ -17,7 +17,6 @@ export default function LoginForm({ defaultUserType = 'student' }: LoginFormProp
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [showPassword, setShowPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
@@ -37,6 +36,7 @@ export default function LoginForm({ defaultUserType = 'student' }: LoginFormProp
   };
 
   // Add loading state near other state declarations
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async(e: React.FormEvent) => {
     e.preventDefault();
@@ -75,7 +75,6 @@ export default function LoginForm({ defaultUserType = 'student' }: LoginFormProp
       }
     }
   };
-  
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -119,7 +118,12 @@ export default function LoginForm({ defaultUserType = 'student' }: LoginFormProp
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="register-form">
+        <form 
+          onSubmit={handleSubmit} 
+          className="register-form" 
+          autoComplete="off"
+          data-form-type="other"
+        >
           <div className="form-group">
             <div className="input-group">
               <input
@@ -129,6 +133,7 @@ export default function LoginForm({ defaultUserType = 'student' }: LoginFormProp
                 value={formData.email}
                 onChange={handleChange}
                 className={errors.email ? 'error' : ''}
+                autoComplete="off"
               />
               <i className="fas fa-envelope"></i>
             </div>
@@ -137,6 +142,16 @@ export default function LoginForm({ defaultUserType = 'student' }: LoginFormProp
 
           <div className="form-group">
             <div className="input-group">
+              <input
+                type={showPassword ? "text" : "password"}
+                name="password"
+                placeholder="Password"
+                value={formData.password}
+                onChange={handleChange}
+                className={errors.password ? 'error' : ''}
+                autoComplete="new-password"
+                data-form-type="other"
+              />
               <button
                 type="button"
                 className="password-toggle"
@@ -145,21 +160,17 @@ export default function LoginForm({ defaultUserType = 'student' }: LoginFormProp
               >
                 <i className={`fas ${showPassword ? 'fa-eye-slash' : 'fa-eye'}`}></i>
               </button>
-              <input
-                type={showPassword ? "text" : "password"}
-                name="password"
-                placeholder="Password"
-                value={formData.password}
-                onChange={handleChange}
-                className={errors.password ? 'error' : ''}
-              />
             </div>
             {errors.password && <span className="error-message">{errors.password}</span>}
           </div>
 
-          <button type="submit" className="register-button" disabled={isLoading}>
+          <button 
+            type="submit" 
+            className="register-button"
+            disabled={isLoading}
+          >
             <i className="fas fa-sign-in-alt"></i>
-           {isLoading ? "Logging in..." : `Login as ${userType}`}
+            {isLoading ? "Logging in..." : `Login as ${userType}`}
           </button>
 
           <div className="login-link">
