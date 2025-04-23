@@ -51,7 +51,6 @@ const CreateQuestionPaper = () => {
    const deleteQuestion = (indexToDelete) => {
     setQuestions(questions.filter((_, index) => index !== indexToDelete));
   };
-
   
 
   const handleSubmit = async (e) => {
@@ -104,22 +103,81 @@ const CreateQuestionPaper = () => {
     }
   };
 
+  // Updated layout to ensure input fields are displayed in a vertical stack
   return (
-    // Update the main container styles
     <div style={{
       padding: '6rem 2rem 2rem 2rem',
       width: '100%',
       margin: '0',
       minHeight: '100vh',
-      background: 'linear-gradient(135deg, #1a1a1a 0%, #2c2c2c 100%)'
+      background: 'linear-gradient(135deg, #1a1a1a 0%, #2c2c2c 100%)',
+      animation: 'fadeIn 1.5s ease-in-out',
+      fontFamily: 'Arial, sans-serif',
     }}>
+      <style>
+        {`
+          @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+          }
+          @keyframes buttonHover {
+            from { transform: scale(1); }
+            to { transform: scale(1.05); }
+          }
+          button:hover {
+            animation: buttonHover 0.3s ease-in-out;
+          }
+          .formGroup {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-bottom: 2rem;
+          }
+          .inputField {
+            background-color: #f0f0f0; /* Light grey background */
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            padding: 0.75rem;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+          }
+          .inputField:focus {
+            outline: none;
+            border-color: #2a5298;
+            box-shadow: 0 0 5px rgba(42, 82, 152, 0.5);
+          }
+          .heading {
+            font-weight: bold;
+            color: #2a5298; /* Dark blue color */
+          }
+          .animatedButton {
+            transition: all 0.3s ease;
+          }
+          .animatedButton:hover {
+            transform: scale(1.1);
+          }
+          .sectionHeading {
+            font-weight: bold;
+            color: #2a5298; /* Dark blue color */
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem; /* Increased font size */
+            text-decoration: underline; /* Underlined */
+          }
+          .questionGroup {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-bottom: 2rem;
+          }
+        `}
+      </style>
       <div style={{
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
         maxWidth: '1600px',
         margin: '0 auto 2rem auto',
-        width: '100%'
+        width: '100%',
       }}>
         <button
           onClick={() => router.push('/teacher-dashboard')}
@@ -131,11 +189,9 @@ const CreateQuestionPaper = () => {
             border: '1px solid rgba(255, 255, 255, 0.2)',
             cursor: 'pointer',
             fontSize: '1rem',
+            fontWeight: 'bold',
             transition: 'all 0.3s ease',
             backdropFilter: 'blur(10px)',
-            ':hover': {
-              backgroundColor: 'rgba(255, 255, 255, 0.2)'
-            }
           }}
         >
           ← Back to Dashboard
@@ -148,10 +204,9 @@ const CreateQuestionPaper = () => {
         marginBottom: '2rem',
         textAlign: 'center',
         fontWeight: 'bolder',
-        width: '100%'
+        textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)'
       }}>Create Question Paper</h2>
 
-      {/* Update the form container styles */}
       <form onSubmit={handleSubmit} style={{
         background: 'white',
         padding: '2rem',
@@ -159,58 +214,38 @@ const CreateQuestionPaper = () => {
         boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
         width: '100%',
         maxWidth: '1600px',
-        margin: '0 auto'
+        margin: '0 auto',
+        animation: 'fadeIn 1.5s ease-in-out',
       }}>
-        <div style={{ marginBottom: '2rem' }}>
-          Exam Title:
+        <div className="formGroup">
+          <label className="heading">Exam Title:</label>
           <input 
             type="text" 
             placeholder="Exam Title" 
             value={title} 
             onChange={(e) => setTitle(e.target.value)} 
             required
-            style={{
-              width: '100%',
-              padding: '0.75rem',
-              marginBottom: '1rem',
-              borderRadius: '8px',
-              border: '1px solid #e5e7eb',
-              fontSize: '1rem'
-            }}
-          /> 
-          Your Subject:
+            className="inputField"
+          />
+          <label className="heading">Your Subject:</label>
           <input 
             type="text" 
             value={subject} 
             placeholder="Please enter the same subject name which you are teaching" 
             onChange={(e) => setSubject(e.target.value)} 
             required
-            style={{
-              width: '100%',
-              padding: '0.75rem',
-              marginBottom: '1rem',
-              borderRadius: '8px',
-              border: '1px solid #e5e7eb',
-              fontSize: '1rem'
-            }}
+            className="inputField"
           />
-           Class or Stream:
+          <label className="heading">Class or Stream:</label>
           <input 
             type="text" 
             value={classStream} 
             placeholder="Please enter the class or the engineering stream in abbreviation" 
             onChange={(e) => setClassStream(e.target.value)} 
             required
-            style={{
-              width: '100%',
-              padding: '0.75rem',
-              marginBottom: '1rem',
-              borderRadius: '8px',
-              border: '1px solid #e5e7eb',
-              fontSize: '1rem'
-            }}
+            className="inputField"
           />
-          Total Marks:
+          <label className="heading">Total Marks:</label>
           <input 
             type="number" 
             min="0"
@@ -219,16 +254,9 @@ const CreateQuestionPaper = () => {
             onWheel={(e) => e.target.blur()}
             onChange={(e) => setTotalMarks(e.target.value)} 
             required
-            style={{
-              width: '100%',
-              padding: '0.75rem',
-              borderRadius: '8px',
-              border: '1px solid #e5e7eb',
-              fontSize: '1rem'
-            }}
+            className="inputField"
           />
-         
-           Time Limit:
+          <label className="heading">Time Limit:</label>
           <input 
             type="number" 
             min="1"
@@ -237,46 +265,31 @@ const CreateQuestionPaper = () => {
             onWheel={(e) => e.target.blur()}
             onChange={(e) => setTimeLimit(e.target.value)} 
             required
-            style={{
-              width: '100%',
-              padding: '0.75rem',
-              borderRadius: '8px',
-              border: '1px solid #e5e7eb',
-              fontSize: '1rem'
-            }}
+            className="inputField"
           />
         </div>
-      
-        <h3 style={{
-          fontSize: '1.5rem',
-          color: '#2a5298',
-          marginBottom: '1.5rem'
-        }}>Questions</h3>
-        
+
+        <h3 className="sectionHeading" >Questions</h3>
+
         {questions.map((q, index) => (
-          <div key={index} style={{
+          <div key={index} className="questionGroup" style={{
             background: '#f8fafc',
             padding: '1.5rem',
             borderRadius: '12px',
-            marginBottom: '1.5rem'
+            marginBottom: '1.5rem',
+            boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+            animation: 'fadeIn 0.5s ease-in-out',
           }}>
-             Question:
+            <label className="heading">Question:</label>
             <input 
               type="text" 
               placeholder="Enter Question" 
               value={q.question} 
               onChange={(e) => updateQuestion(index, "question", e.target.value)} 
               required
-              style={{
-                width: '100%',
-                padding: '0.75rem',
-                marginBottom: '1rem',
-                borderRadius: '8px',
-                border: '1px solid #e5e7eb',
-                fontSize: '1rem'
-              }}
+              className="inputField"
             />
-            Options:
+            <label className="heading">Options:</label>
             {q.options.map((opt, optIndex) => (
               <input 
                 key={optIndex} 
@@ -289,84 +302,60 @@ const CreateQuestionPaper = () => {
                   updateQuestion(index, "options", newOptions);
                 }} 
                 required
-                style={{
-                  width: '100%',
-                  padding: '0.75rem',
-                  marginBottom: '0.75rem',
-                  borderRadius: '8px',
-                  border: '1px solid #e5e7eb',
-                  fontSize: '1rem'
-                }}
+                className="inputField"
               />
             ))}
-             Type the correct answer here:
+            <label className="heading">Type the correct answer here:</label>
             <input 
               type="text" 
               placeholder="Correct Answer" 
               value={q.answer} 
               onChange={(e) => updateQuestion(index, "answer", e.target.value)} 
               required
-              style={{
-                width: '100%',
-                padding: '0.75rem',
-                borderRadius: '8px',
-                border: '1px solid #e5e7eb',
-                fontSize: '1rem',
-                backgroundColor: '#f0fdf4'
-              }}
+              className="inputField"
             />
-                Marks allotted:
-                <input 
-                  type="number" 
-                  placeholder="Enter marks for this question" 
-                  value={q.marks}
-                  min='1' 
-                  onWheel={(e) => e.target.blur()}
-                  onChange={(e) => updateQuestion(index, "marks", e.target.value)}
-                  required
-                  style={{
-                    width: '100%',
-                    padding: '0.75rem',
-                    marginTop: '0.75rem',
-                    marginBottom: '1rem', // Added margin bottom for spacing
-                    borderRadius: '8px',
-                    border: '1px solid #e5e7eb',
-                    fontSize: '1rem',
-                    backgroundColor: '#f0fdf4'
-                  }}
-                />
-            
-                
-                <button
-                  type="button"
-                  onClick={() => deleteQuestion(index)}
-                  style={{
-                    padding: '0.5rem 1rem',
-                    borderRadius: '6px',
-                    border: 'none',
-                    backgroundColor: '#dc2626',
-                    color: 'white',
-                    cursor: 'pointer',
-                    fontSize: '0.9rem',
-                    fontWeight: '500',
-                    transition: 'all 0.2s ease',
-                    marginTop: '0.5rem',
-                    width: 'fit-content'
-                  }}
-                >
-                  Delete Question
-                </button>
-              </div>
-            ))}
+            <label className="heading">Marks allotted:</label>
+            <input 
+              type="number" 
+              placeholder="Enter marks for this question" 
+              value={q.marks}
+              min='1' 
+              onWheel={(e) => e.target.blur()}
+              onChange={(e) => updateQuestion(index, "marks", e.target.value)}
+              required
+              className="inputField"
+            />
+            <button
+              type="button"
+              onClick={() => deleteQuestion(index)}
+              className="animatedButton"
+              style={{
+                padding: '0.5rem 1rem',
+                borderRadius: '6px',
+                border: 'none',
+                backgroundColor: '#dc2626',
+                color: 'white',
+                cursor: 'pointer',
+                fontSize: '0.9rem',
+                fontWeight: '500',
+                marginTop: '0.5rem',
+                width: 'fit-content',
+              }}
+            >
+              Delete Question
+            </button>
+          </div>
+        ))}
+
         <div style={{
           display: 'flex',
           gap: '1rem',
-          marginTop: '2rem'
+          marginTop: '2rem',
         }}>
           <button 
             type="button" 
             onClick={addQuestion}
-    
+            className="animatedButton"
             style={{
               padding: '0.75rem 1.5rem',
               borderRadius: '8px',
@@ -375,13 +364,13 @@ const CreateQuestionPaper = () => {
               color: '#2a5298',
               cursor: 'pointer',
               fontSize: '1rem',
-              fontWeight: '500',
-              transition: 'all 0.3s ease'
+              fontWeight: 'bold',
             }}
           >Add Question</button>
           <button 
             type="submit" 
             disabled={loading}
+            className="animatedButton"
             style={{
               padding: '0.75rem 1.5rem',
               borderRadius: '8px',
@@ -390,9 +379,8 @@ const CreateQuestionPaper = () => {
               color: 'white',
               cursor: loading ? 'not-allowed' : 'pointer',
               fontSize: '1rem',
-              fontWeight: '500',
+              fontWeight: 'bold',
               opacity: loading ? 0.7 : 1,
-              transition: 'all 0.3s ease'
             }}
           >{loading ? "Submitting..." : "Publish"}</button>
         </div>
