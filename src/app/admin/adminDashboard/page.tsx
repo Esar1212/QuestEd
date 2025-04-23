@@ -2,11 +2,19 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { FaUsers, FaFileAlt, FaChartBar, FaCog, FaSignOutAlt, FaPlus, FaEdit, FaTrash, FaCheckCircle, FaClock } from 'react-icons/fa';
+import { FaUsers, FaFileAlt, FaChartBar, FaVideo, FaCog, FaSignOutAlt, FaPlus, FaEdit, FaTrash, FaCheckCircle, FaClock } from 'react-icons/fa';
 
 export default function AdminDashboard() {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState('overview');
+  const [stats, setStats] = useState({
+    totalUsers: '0',
+    activeExams: '0',
+    averageScore: '0%',
+    totalVideos: '0'
+  });
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
   useEffect(() => {
     // Check for admin token cookie
@@ -22,7 +30,27 @@ export default function AdminDashboard() {
         router.push('/admin/login');
       }
     };
+
+    // Fetch dashboard statistics
+    const fetchStats = async () => {
+      try {
+        const response = await fetch('/api/admin/dashboard-stats');
+        const data = await response.json();
+        
+        if (!response.ok) {
+          throw new Error(data.error || 'Failed to fetch statistics');
+        }
+
+        setStats(data.stats);
+      } catch (err: any) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
     checkAuth();
+    fetchStats();
   }, [router]);
 
   const handleLogout = async () => {
@@ -37,11 +65,11 @@ export default function AdminDashboard() {
     }
   };
 
-  const stats = [
-    { title: 'Total Users', value: '1,234', change: '+12%', icon: FaUsers, color: '#4299e1' },
-    { title: 'Active Exams', value: '45', change: '+5%', icon: FaFileAlt, color: '#48bb78' },
-    { title: 'Average Score', value: '85%', change: '+3%', icon: FaChartBar, color: '#805ad5' },
-    { title: 'Pending Reviews', value: '23', change: '-2%', icon: FaClock, color: '#ecc94b' },
+  const statCards = [
+    { title: 'Total Users', value: stats.totalUsers, change: '+12%', icon: FaUsers, color: '#4299e1' },
+    { title: 'Active Exams', value: stats.activeExams, change: '+5%', icon: FaFileAlt, color: '#48bb78' },
+    { title: 'Average Score', value: stats.averageScore, change: '+3%', icon: FaChartBar, color: '#805ad5' },
+    { title: 'Video Lectures', value: stats.totalVideos, change: '+8%', icon: FaVideo, color: '#ecc94b' },
   ];
 
   const recentExams = [
@@ -56,6 +84,22 @@ export default function AdminDashboard() {
     { id: 3, name: 'Mike Johnson', email: 'mike@example.com', role: 'Student', date: '2024-03-17' },
   ];
 
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-red-500">{error}</div>
+      </div>
+    );
+  }
+
   return (
     <div className="admin-dashboard">
       {/* Header */}
@@ -69,7 +113,7 @@ export default function AdminDashboard() {
 
       {/* Stats Grid */}
       <div className="stats-grid">
-        {stats.map((stat, index) => (
+        {statCards.map((stat, index) => (
           <div key={index} className="stat-card">
             <div className="stat-icon" style={{ backgroundColor: stat.color }}>
               <stat.icon />
