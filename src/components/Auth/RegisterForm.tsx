@@ -186,6 +186,67 @@ export default function RegisterForm({ defaultUserType = 'student' }: RegisterFo
 
   return (
     <div className="register-container">
+      <style jsx>{`
+        .input-group select {
+          width: 100%;
+          padding: 12px 40px 12px 16px;
+          border: 2px solid rgba(42, 82, 152, 0.2);
+          border-radius: 8px;
+          background-color: rgba(255, 255, 255, 0.9);
+          color: #333;
+          font-size: 1rem;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          appearance: none;
+          background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%232a5298' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+          background-repeat: no-repeat;
+          background-position: right 12px center;
+          background-size: 16px;
+        }
+
+        .input-group select:hover {
+          border-color: #2a5298;
+          box-shadow: 0 2px 4px rgba(42, 82, 152, 0.1);
+        }
+
+        .input-group select:focus {
+          outline: none;
+          border-color: #2a5298;
+          box-shadow: 0 0 0 3px rgba(42, 82, 152, 0.2);
+        }
+
+        .input-group select option {
+          padding: 12px 16px;
+          background-color: #ffffff;
+          color: #333;
+          font-size: 1rem;
+          transition: background-color 0.2s ease;
+          border-bottom: 1px solid rgba(42, 82, 152, 0.1);
+          cursor: pointer;
+        }
+
+        .input-group select option:hover,
+        .input-group select option:focus {
+          background-color: rgba(42, 82, 152, 0.1) !important;
+          color: #2a5298;
+        }
+
+        .input-group select option:checked {
+          background-color: rgba(42, 82, 152, 0.2) !important;
+          color: #2a5298;
+          font-weight: 500;
+        }
+
+        .input-group select option:first-child {
+          font-style: italic;
+          color: #666;
+        }
+
+        .input-group select.error {
+          border-color: #ff4444;
+          background-color: rgba(255, 68, 68, 0.05);
+        }
+      `}</style>
       <div className="register-card">
         <div className="register-header">
           <h1>Create Account</h1>
