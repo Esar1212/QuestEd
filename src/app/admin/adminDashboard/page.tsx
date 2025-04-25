@@ -86,7 +86,13 @@ export default function AdminDashboard() {
   ];
 
   if (loading) {
-    return
+    return (
+      <div style={{ 
+        display: 'flex', 
+        justifyContent: 'center', 
+        alignItems: 'center', 
+        minHeight: '100vh' 
+      }}>
       <LoadingSpinner/>
     );
   }
