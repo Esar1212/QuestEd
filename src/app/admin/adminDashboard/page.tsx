@@ -94,6 +94,7 @@ export default function AdminDashboard() {
         minHeight: '100vh' 
       }}>
       <LoadingSpinner/>
+        </div>
     );
   }
 
