@@ -78,9 +78,12 @@ export default function VideoLectures() {
 
     return (
         <div style={{
-            padding: 'clamp(4rem, 8vw, 6rem) clamp(1rem, 4vw, 2rem) 2rem',
+            padding: 'clamp(4rem, 8vw, 6rem) clamp(0.5rem, 2vw, 2rem) 2rem',
             minHeight: '100vh',
             background: 'linear-gradient(135deg, #0a192f, #1a365d)',
+            width: '100%',
+            maxWidth: '100vw',
+            overflowX: 'hidden'
         }}>
             {isSearching ? (
                 <div style={{
@@ -419,7 +422,7 @@ export default function VideoLectures() {
                                     </div>
 
                                     <div style={{ 
-                                        padding: '1.8rem',
+                                        padding: 'clamp(1rem, 3vw, 1.8rem)',
                                         background: 'linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(249,250,251,0.98) 100%)',
                                         position: 'relative',
                                         overflow: 'hidden'
