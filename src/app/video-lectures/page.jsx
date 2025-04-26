@@ -63,7 +63,17 @@ export default function VideoLectures() {
         (!searchTitle || video.title.toLowerCase().includes(searchTitle.toLowerCase()))
     );
 
-    if (loading) return <LoadingSpinner />;
+    if (loading)
+        return  (
+      <div style={{ 
+        display: 'flex', 
+        justifyContent: 'center', 
+        alignItems: 'center', 
+        minHeight: '100vh' 
+      }}>
+        <LoadingSpinner />
+      </div>
+    );
     if (error) return <div>Error: {error}</div>;
 
     return (
