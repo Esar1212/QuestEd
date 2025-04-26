@@ -78,15 +78,16 @@ export default function VideoLectures() {
 
     return (
         <div style={{
-            padding: '6rem 2rem 2rem 2rem',
+            padding: 'clamp(4rem, 8vw, 6rem) clamp(1rem, 4vw, 2rem) 2rem',
             minHeight: '100vh',
-            background: 'linear-gradient(135deg, #0a192f, #1a365d)', // Changed to bluish-black
+            background: 'linear-gradient(135deg, #0a192f, #1a365d)',
         }}>
             {isSearching ? (
                 <div style={{
+                    width: '90%',
                     maxWidth: '600px',
                     margin: '0 auto',
-                    padding: '2.5rem',
+                    padding: 'clamp(1.5rem, 4vw, 2.5rem)',
                     background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(240, 240, 255, 0.95) 100%)',
                     borderRadius: '20px',
                     boxShadow: '0 20px 50px rgba(0, 0, 0, 0.3)',
@@ -620,3 +621,4 @@ export default function VideoLectures() {
         </div>
     );
 }
+
