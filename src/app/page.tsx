@@ -10,11 +10,16 @@ export default function Home() {
       width: '100%',
       maxWidth: '100%',
       margin: 0,
-      padding: '0 20px',
+      padding: '80px 20px 0', // Added top padding to account for navbar
       overflowX: 'hidden',
       boxSizing: 'border-box'
     }}>
-      <header className="hero-section">
+      <header className="hero-section" style={{
+        paddingTop: '2rem', // Additional padding for better spacing
+        width: '100%',
+        position: 'relative',
+        zIndex: 1
+      }}>
         <div className="hero-content">
           <h1 className="hero-title">
             Welcome to <span className="highlight">Online Examination Portal</span>
