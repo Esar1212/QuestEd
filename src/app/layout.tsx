@@ -9,7 +9,7 @@ const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
   title: 'QuestEd',
-  description: 'A platform for conducting seamless online examinations',
+  description: 'Your trusted platform for conducting and taking online exams. We provide a seamless experience for both educators and students.',
   openGraph: {
      siteName: 'Online Examination Portal',
     images: [
