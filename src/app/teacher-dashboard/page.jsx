@@ -273,7 +273,7 @@ export default function TeacherDashboard() {
                 borderRadius: '50%',
                 display: 'inline-block'
               }} />
-              Subject: {userData?.subject}
+              Department: {userData?.subject}
             </p>
             <p style={{ 
               color: 'rgba(255, 255, 255, 0.9)',
