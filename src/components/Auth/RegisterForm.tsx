@@ -458,7 +458,7 @@ export default function RegisterForm({ defaultUserType = 'student' }: RegisterFo
                 type="text"
                 name="fullName"
                 pattern="[a-zA-Z\s]+"
-                placeholder="Subject"
+                placeholder="Department"
                 value={formData.subject}
                 onChange={(e)=>setFormData({...formData,subject:e.target.value})}
                 className={errors.subject ? 'error' : ''}
