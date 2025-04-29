@@ -227,11 +227,11 @@ const CreateQuestionPaper = () => {
             required
             className="inputField"
           />
-          <label className="heading">Your Subject:</label>
+          <label className="heading">Your Department:</label>
           <input 
             type="text" 
             value={subject} 
-            placeholder="Please enter the same subject name which you are teaching" 
+            placeholder="Please enter the same department name which you are teaching" 
             onChange={(e) => setSubject(e.target.value)} 
             required
             className="inputField"
