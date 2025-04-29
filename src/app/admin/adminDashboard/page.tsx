@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { FaUsers, FaFileAlt, FaVideo, FaSignOutAlt, FaTrash, FaClock } from 'react-icons/fa';
+import { FaUsers, FaFileAlt, FaChartBar, FaVideo, FaCog, FaSignOutAlt, FaPlus, FaEdit, FaTrash, FaCheckCircle, FaClock } from 'react-icons/fa';
 import LoadingSpinner from '@/components/LoadingSpinner';
 
 // Add proper type definitions
@@ -60,68 +60,44 @@ export default function AdminDashboard() {
     }
   };
 
-  // Add new state for question papers
-  // Add this interface with the other interfaces at the top
-  interface QuestionPaper {
-    _id: string;
-    title: string;
-    subject: string;
-    timeLimit: number;
-    totalMarks: number;
-    classStream: string;
-    questions: Array<{
-      question: string;
-      options: string[];
-      answer: string;
-      marks: number;
-    }>;
-    createdAt: string;
-  }
-  
-  // Update the questionPapers state definition
-  const [questionPapers, setQuestionPapers] = useState<QuestionPaper[]>([]);
-  
-  // Modify useEffect to store question papers data
   useEffect(() => {
-      const fetchData = async () => {
-        try {
-          const [authResponse, usersResponse, videosResponse, papersResponse] = await Promise.all([
-            fetch('/api/admin/check-auth', { credentials: 'include' }),
-            fetch('/api/admin/getUser', { credentials: 'include' }),
-            fetch('/api/getVideos', { credentials: 'include' }),
-            fetch('/api/admin/getQuestionPapers', { credentials: 'include' })
-          ]);
-  
-          if (!authResponse.ok) {
-            router.push('/admin/login');
-            return;
-          }
-  
-          if (usersResponse.ok && videosResponse.ok && papersResponse.ok) {
-            const userData = await usersResponse.json();
-            const videoData = await videosResponse.json();
-            const paperData = await papersResponse.json();
-            
-            setUsers(userData);
-            setQuestionPapers(paperData.questionPapers);
-            setStats(prev => ({
-              ...prev,
-              totalUsers: (userData.students.length + userData.teachers.length).toString(),
-              totalVideos: videoData.videos.length.toString(),
-              activeExams: paperData.questionPapers.length.toString()
-            }));
-          }
-        } catch (error) {
-          setError('Failed to fetch data');
-        } finally {
-          setLoading(false);
+    const fetchData = async () => {
+      try {
+        const [authResponse, usersResponse, videosResponse, papersResponse] = await Promise.all([
+          fetch('/api/admin/check-auth', { credentials: 'include' }),
+          fetch('/api/admin/getUser', { credentials: 'include' }),
+          fetch('/api/getVideos', { credentials: 'include' }),
+          fetch('/api/admin/getQuestionPapers', { credentials: 'include' })
+        ]);
+
+        if (!authResponse.ok) {
+          router.push('/admin/login');
+          return;
         }
-      };
-  
-      fetchData();
-    }, [router]);
-  
-  // Add this in the return statement after Students Section
+
+        if (usersResponse.ok && videosResponse.ok && papersResponse.ok) {
+          const userData = await usersResponse.json();
+          const videoData = await videosResponse.json();
+          const paperData = await papersResponse.json();
+          
+          setUsers(userData);
+          setStats(prev => ({
+            ...prev,
+            totalUsers: (userData.students.length + userData.teachers.length).toString(),
+            totalVideos: videoData.videos.length.toString(),
+            activeExams: paperData.questionPapers.length.toString()
+          }));
+        }
+      } catch (error) {
+        setError('Failed to fetch data');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [router]);
+
   if (loading) {
     return (
       <div style={{ 
@@ -286,46 +262,6 @@ export default function AdminDashboard() {
                   <button 
                     className="action-button delete" 
                     onClick={() => handleDelete(student.id, 'student')}
-                  >
-                    <FaTrash />
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-        {/* Active Exams Section */}
-        <div className="content-card">
-          <div className="card-header">
-            <h2 className="card-title">Active Exams ({questionPapers.length})</h2>
-          </div>
-          <div>
-            {questionPapers.map((paper) => (
-              <div key={paper._id} className="list-item">
-                <div className="item-info">
-                  <h3>{paper.title}</h3>
-                  <p>Subject: {paper.subject}</p>
-                  <small>
-                    Time Limit: {paper.timeLimit} minutes | Total Marks: {paper.totalMarks}
-                  </small>
-                  <br/>
-                  <small>
-                    {!isNaN(Number(paper.classStream)) 
-                      ? `Class: ${paper.classStream}` 
-                      : `Stream: ${paper.classStream}`
-                    }
-                  </small>
-                  <br/>
-                  <small>Total Questions: {paper.questions.length}</small>
-                  <br/>
-                  <small className="block mt-1">
-                    Created: {new Date(paper.createdAt).toLocaleDateString()}
-                  </small>
-                </div>
-                <div className="item-actions">
-                  <button 
-                    className="action-button delete"
-                    onClick={() => handleDelete(paper._id, 'exam')}
                   >
                     <FaTrash />
                   </button>
