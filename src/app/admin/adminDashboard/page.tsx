@@ -2,57 +2,51 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { FaUsers, FaFileAlt, FaChartBar, FaVideo, FaCog, FaSignOutAlt, FaPlus, FaEdit, FaTrash, FaCheckCircle, FaClock } from 'react-icons/fa';
+import { FaUsers, FaFileAlt, FaVideo, FaSignOutAlt, FaTrash, FaClock } from 'react-icons/fa';
 import LoadingSpinner from '@/components/LoadingSpinner';
+
+// Add proper type definitions
+interface Teacher {
+  id: string;
+  name: string;
+  email: string;
+  subject: string;
+  status: string;
+  registrationDate: string;
+}
+
+interface Student {
+  id: string;
+  name: string;
+  email: string;
+  classStream: string;
+  status: string;
+  registrationDate: string;
+}
 
 export default function AdminDashboard() {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState('overview');
+  // Update stats state
   const [stats, setStats] = useState({
     totalUsers: '0',
     activeExams: '0',
-    averageScore: '0%',
     totalVideos: '0'
   });
+  
+  // Update statCards array
+  const statCards = [
+    { title: 'Total Users', value: stats.totalUsers, change: '+12%', icon: FaUsers, color: '#4299e1' },
+    { title: 'Active Exams', value: stats.activeExams, change: '+5%', icon: FaFileAlt, color: '#48bb78' },
+    { title: 'Video Lectures', value: stats.totalVideos, change: '+8%', icon: FaVideo, color: '#ecc94b' },
+  ];
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [users, setUsers] = useState<{ students: Student[]; teachers: Teacher[] }>({ 
+    students: [], 
+    teachers: [] 
+  });
 
-  useEffect(() => {
-    // Check for admin token cookie
-    const checkAuth = async () => {
-      try {
-        const response = await fetch('/api/admin/check-auth', {
-          credentials: 'include'
-        });
-        if (!response.ok) {
-          router.push('/admin/login');
-        }
-      } catch (error) {
-        router.push('/admin/login');
-      }
-    };
-
-    // Fetch dashboard statistics
-    const fetchStats = async () => {
-      try {
-        const response = await fetch('/api/admin/dashboard-stats');
-        const data = await response.json();
-        
-        if (!response.ok) {
-          throw new Error(data.error || 'Failed to fetch statistics');
-        }
-
-        setStats(data.stats);
-      } catch (err: any) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    checkAuth();
-    fetchStats();
-  }, [router]);
 
   const handleLogout = async () => {
     try {
@@ -66,25 +60,68 @@ export default function AdminDashboard() {
     }
   };
 
-  const statCards = [
-    { title: 'Total Users', value: stats.totalUsers, change: '+12%', icon: FaUsers, color: '#4299e1' },
-    { title: 'Active Exams', value: stats.activeExams, change: '+5%', icon: FaFileAlt, color: '#48bb78' },
-    { title: 'Average Score', value: stats.averageScore, change: '+3%', icon: FaChartBar, color: '#805ad5' },
-    { title: 'Video Lectures', value: stats.totalVideos, change: '+8%', icon: FaVideo, color: '#ecc94b' },
-  ];
-
-  const recentExams = [
-    { id: 1, title: 'Mathematics Final', subject: 'Mathematics', date: '2024-03-20', status: 'Active' },
-    { id: 2, title: 'Physics Midterm', subject: 'Physics', date: '2024-03-21', status: 'Scheduled' },
-    { id: 3, title: 'Chemistry Quiz', subject: 'Chemistry', date: '2024-03-22', status: 'Completed' },
-  ];
-
-  const recentUsers = [
-    { id: 1, name: 'John Doe', email: 'john@example.com', role: 'Student', date: '2024-03-19' },
-    { id: 2, name: 'Jane Smith', email: 'jane@example.com', role: 'Teacher', date: '2024-03-18' },
-    { id: 3, name: 'Mike Johnson', email: 'mike@example.com', role: 'Student', date: '2024-03-17' },
-  ];
-
+  // Add new state for question papers
+  // Add this interface with the other interfaces at the top
+  interface QuestionPaper {
+    _id: string;
+    title: string;
+    subject: string;
+    timeLimit: number;
+    totalMarks: number;
+    classStream: string;
+    questions: Array<{
+      question: string;
+      options: string[];
+      answer: string;
+      marks: number;
+    }>;
+    createdAt: string;
+  }
+  
+  // Update the questionPapers state definition
+  const [questionPapers, setQuestionPapers] = useState<QuestionPaper[]>([]);
+  
+  // Modify useEffect to store question papers data
+  useEffect(() => {
+      const fetchData = async () => {
+        try {
+          const [authResponse, usersResponse, videosResponse, papersResponse] = await Promise.all([
+            fetch('/api/admin/check-auth', { credentials: 'include' }),
+            fetch('/api/admin/getUser', { credentials: 'include' }),
+            fetch('/api/getVideos', { credentials: 'include' }),
+            fetch('/api/admin/getQuestionPapers', { credentials: 'include' })
+          ]);
+  
+          if (!authResponse.ok) {
+            router.push('/admin/login');
+            return;
+          }
+  
+          if (usersResponse.ok && videosResponse.ok && papersResponse.ok) {
+            const userData = await usersResponse.json();
+            const videoData = await videosResponse.json();
+            const paperData = await papersResponse.json();
+            
+            setUsers(userData);
+            setQuestionPapers(paperData.questionPapers);
+            setStats(prev => ({
+              ...prev,
+              totalUsers: (userData.students.length + userData.teachers.length).toString(),
+              totalVideos: videoData.videos.length.toString(),
+              activeExams: paperData.questionPapers.length.toString()
+            }));
+          }
+        } catch (error) {
+          setError('Failed to fetch data');
+        } finally {
+          setLoading(false);
+        }
+      };
+  
+      fetchData();
+    }, [router]);
+  
+  // Add this in the return statement after Students Section
   if (loading) {
     return (
       <div style={{ 
@@ -93,8 +130,8 @@ export default function AdminDashboard() {
         alignItems: 'center', 
         minHeight: '100vh' 
       }}>
-      <LoadingSpinner/>
-        </div>
+        <LoadingSpinner />
+      </div>
     );
   }
 
@@ -106,6 +143,65 @@ export default function AdminDashboard() {
     );
   }
 
+  // Replace static recentUsers with dynamic data
+  const displayUsers = [
+    ...users.teachers.slice(0, 2).map(teacher => ({
+      id: teacher.id,
+      name: teacher.name,
+      email: teacher.email,
+      role: 'Teacher',
+      date: new Date(teacher.registrationDate).toLocaleDateString(),
+      subject: teacher.subject,
+      status: teacher.status
+    })),
+    ...users.students.slice(0, 2).map(student => ({
+      id: student.id,
+      name: student.name,
+      email: student.email,
+      role: 'Student',
+      date: new Date(student.registrationDate).toLocaleDateString(),
+      class: student.classStream,
+      status: student.status
+    }))
+  ];
+  const handleDelete = async (userId: string, userType: string) => {
+    const confirmDelete = window.confirm(`Are you sure you want to remove this ${userType} entry from database?`);
+    
+    if (!confirmDelete) {
+      return;
+    }
+    try {
+      const response = await fetch(`/api/admin/getDeleteUser?id=${userId}&type=${userType}`, {
+        method: 'DELETE',
+        credentials: 'include'
+      });
+
+      if (response.ok) {
+        // Update users state after successful deletion
+        setUsers(prev => {
+          const newUsers = {
+            students: userType === 'student' ? prev.students.filter(s => s.id !== userId) : prev.students,
+            teachers: userType === 'teacher' ? prev.teachers.filter(t => t.id !== userId) : prev.teachers
+          };
+          
+          // Update total users count in stats
+          setStats(prevStats => ({
+            ...prevStats,
+            totalUsers: (newUsers.students.length + newUsers.teachers.length).toString()
+          }));
+
+          return newUsers;
+        });
+      } else {
+        setError('Failed to delete user');
+      }
+    } catch (error) {
+      console.error('Delete error:', error);
+      setError('Failed to delete user');
+    }
+  };
+  
+  // In the return statement, update the content grid
   return (
     <div className="admin-dashboard">
       {/* Header */}
@@ -116,7 +212,7 @@ export default function AdminDashboard() {
           Logout
         </button>
       </div>
-
+  
       {/* Stats Grid */}
       <div className="stats-grid">
         {statCards.map((stat, index) => (
@@ -126,39 +222,35 @@ export default function AdminDashboard() {
             </div>
             <p className="stat-title">{stat.title}</p>
             <h3 className="stat-value">{stat.value}</h3>
-            <p className={`stat-change ${stat.change.startsWith('+') ? 'positive' : 'negative'}`}>
-              {stat.change}
-            </p>
           </div>
         ))}
       </div>
-
+  
       {/* Main Content Grid */}
       <div className="content-grid">
-        {/* Recent Exams */}
+        {/* Teachers Section */}
         <div className="content-card">
           <div className="card-header">
-            <h2 className="card-title">Recent Exams</h2>
-            <button className="add-button">
-              <FaPlus />
-              New Exam
-            </button>
+            <h2 className="card-title">Teachers ({users.teachers.length})</h2> 
           </div>
           <div>
-            {recentExams.map((exam) => (
-              <div key={exam.id} className="list-item">
+            {users.teachers.map((teacher) => (
+              <div key={teacher.id} className="list-item">
                 <div className="item-info">
-                  <h3>{exam.title}</h3>
-                  <p>{exam.subject}</p>
+                  <h3>{teacher.name}</h3>
+                  <p>{teacher.email}</p>
+                  <small>Department: {teacher.subject} </small>
+                  <br/>
+                  <small className="block mt-1">Registered: {new Date(teacher.registrationDate).toLocaleDateString()}</small>
                 </div>
                 <div className="item-actions">
-                  <span className={`status-badge status-${exam.status.toLowerCase()}`}>
-                    {exam.status}
+                  <span className={`role-badge role-teacher`}>
+                    {teacher.status}
                   </span>
-                  <button className="action-button edit">
-                    <FaEdit />
-                  </button>
-                  <button className="action-button delete">
+                  <button 
+                    className="action-button delete" 
+                    onClick={() => handleDelete(teacher.id, 'teacher')}
+                  >
                     <FaTrash />
                   </button>
                 </div>
@@ -166,31 +258,75 @@ export default function AdminDashboard() {
             ))}
           </div>
         </div>
-
-        {/* Recent Users */}
+  
+        {/* Students Section */}
         <div className="content-card">
           <div className="card-header">
-            <h2 className="card-title">Recent Users</h2>
-            <button className="add-button">
-              <FaPlus />
-              Add User
-            </button>
+            <h2 className="card-title">Students ({users.students.length})</h2>
           </div>
           <div>
-            {recentUsers.map((user) => (
-              <div key={user.id} className="list-item">
+            {users.students.map((student) => (
+              <div key={student.id} className="list-item">
                 <div className="item-info">
-                  <h3>{user.name}</h3>
-                  <p>{user.email}</p>
+                  <h3>{student.name}</h3>
+                  <p>{student.email}</p>
+                  <small>
+                    {!isNaN(Number(student.classStream)) 
+                      ? `Class: ${student.classStream} ` 
+                      : `Stream: ${student.classStream} `
+                    }
+                  </small>
+                  <br/>
+                  <small className="block mt-1">Registered: {new Date(student.registrationDate).toLocaleDateString()}</small>
                 </div>
                 <div className="item-actions">
-                  <span className={`role-badge role-${user.role.toLowerCase()}`}>
-                    {user.role}
+                  <span className={`role-badge role-student`}>
+                    {student.status}
                   </span>
-                  <button className="action-button edit">
-                    <FaEdit />
+                  <button 
+                    className="action-button delete" 
+                    onClick={() => handleDelete(student.id, 'student')}
+                  >
+                    <FaTrash />
                   </button>
-                  <button className="action-button delete">
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+        {/* Active Exams Section */}
+        <div className="content-card">
+          <div className="card-header">
+            <h2 className="card-title">Active Exams ({questionPapers.length})</h2>
+          </div>
+          <div>
+            {questionPapers.map((paper) => (
+              <div key={paper._id} className="list-item">
+                <div className="item-info">
+                  <h3>{paper.title}</h3>
+                  <p>Subject: {paper.subject}</p>
+                  <small>
+                    Time Limit: {paper.timeLimit} minutes | Total Marks: {paper.totalMarks}
+                  </small>
+                  <br/>
+                  <small>
+                    {!isNaN(Number(paper.classStream)) 
+                      ? `Class: ${paper.classStream}` 
+                      : `Stream: ${paper.classStream}`
+                    }
+                  </small>
+                  <br/>
+                  <small>Total Questions: {paper.questions.length}</small>
+                  <br/>
+                  <small className="block mt-1">
+                    Created: {new Date(paper.createdAt).toLocaleDateString()}
+                  </small>
+                </div>
+                <div className="item-actions">
+                  <button 
+                    className="action-button delete"
+                    onClick={() => handleDelete(paper._id, 'exam')}
+                  >
                     <FaTrash />
                   </button>
                 </div>
@@ -201,4 +337,4 @@ export default function AdminDashboard() {
       </div>
     </div>
   );
-} 
+}
