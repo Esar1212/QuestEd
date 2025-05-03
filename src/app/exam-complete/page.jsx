@@ -159,12 +159,138 @@ export default function ExamComplete() {
                 {/* Stats Grid */}
                 <div style={{
                     display: 'grid',
-                    gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
-                    gap: 'clamp(1rem, 3vw, 2rem)',
-                    padding: 'clamp(1.5rem, 4vw, 2.5rem)',
+                    gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', // Reduced minmax value
+                    gap: 'clamp(0.75rem, 2vw, 2rem)', // Adjusted gap
+                    padding: 'clamp(1rem, 3vw, 2.5rem)', // Adjusted padding
                     background: 'white'
                 }}>
-                    {/* ... Stats cards remain the same ... */}
+                    {/* Score Card */}
+                    <div style={{
+                        background: 'linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%)',
+                        padding: 'clamp(1rem, 2vw, 1.5rem)', // Responsive padding
+                        borderRadius: '12px',
+                        textAlign: 'center',
+                        border: '1px solid rgba(22,163,74,0.1)'
+                    }}>
+                        <h3 style={{
+                            fontSize: 'clamp(0.9rem, 2.5vw, 1.1rem)', // Responsive font size
+                            color: '#166534',
+                            marginBottom: '0.5rem'
+                        }}>Your Score</h3>
+                        <div style={{
+                            fontSize: 'clamp(1.5rem, 4vw, 2rem)', // Responsive font size
+                            fontWeight: '700',
+                            color: '#16a34a'
+                        }}>
+                            {stats?.totalScore} / {stats?.totalMarks}
+                        </div>
+                    </div>
+
+                    {/* Percentage Card */}
+                    <div style={{
+                        background: 'linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%)',
+                        padding: 'clamp(1rem, 2vw, 1.5rem)', // Responsive padding
+                        borderRadius: '12px',
+                        textAlign: 'center',
+                        border: '1px solid rgba(37,99,235,0.1)'
+                    }}>
+                        <h3 style={{
+                            fontSize: 'clamp(0.9rem, 2.5vw, 1.1rem)', // Responsive font size
+                            color: '#1e40af',
+                            marginBottom: '0.5rem'
+                        }}>Percentage</h3>
+                        <div style={{
+                            fontSize: 'clamp(1.5rem, 4vw, 2rem)', // Responsive font size
+                            fontWeight: '700',
+                            color: '#2563eb'
+                        }}>
+                            {((stats?.totalScore / stats?.totalMarks) * 100).toFixed(1)}%
+                        </div>
+                    </div>
+
+                    {/* Time Taken Card */}
+                    <div style={{
+                        background: 'linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%)',
+                        padding: 'clamp(1rem, 2vw, 1.5rem)',
+                        borderRadius: '12px',
+                        textAlign: 'center',
+                        border: '1px solid rgba(234,88,12,0.1)'
+                    }}>
+                        <h3 style={{
+                            fontSize: 'clamp(0.9rem, 2.5vw, 1.1rem)',
+                            color: '#9a3412',
+                            marginBottom: '0.5rem'
+                        }}>Time Taken</h3>
+                        <div style={{
+                            fontSize: 'clamp(1.5rem, 4vw, 2rem)',
+                            fontWeight: '700',
+                            color: '#ea580c'
+                        }}>
+                            {(() => {
+                                if (stats?.startedAt && stats?.completedAt) {
+                                    const start = new Date(stats.startedAt);
+                                    const end = new Date(stats.completedAt);
+                                    const diffInSeconds = Math.round((end - start) / 1000);
+                                    const minutes = Math.floor(diffInSeconds / 60);
+                                    const seconds = diffInSeconds % 60;
+                                    
+                                    if (minutes === 0) {
+                                        return `${seconds}s`;
+                                    }
+                                    return `${minutes}m ${seconds}s`;
+                                }
+                                return stats?.timeTaken ? `${stats.timeTaken}m` : '--';
+                            })()}
+                        </div>
+                    </div>
+
+                    {/* Grade Card */}
+                    <div style={{
+                        background: 'linear-gradient(135deg, #faf5ff 0%, #f3e8ff 100%)',
+                        padding: 'clamp(1rem, 2vw, 1.5rem)',
+                        borderRadius: '12px',
+                        textAlign: 'center',
+                        border: '1px solid rgba(147,51,234,0.1)'
+                    }}>
+                        <h3 style={{
+                            fontSize: 'clamp(0.9rem, 2.5vw, 1.1rem)',
+                            color: '#6b21a8',
+                            marginBottom: '0.5rem'
+                        }}>Grade</h3>
+                        <div style={{
+                            fontSize: 'clamp(1.5rem, 4vw, 2rem)',
+                            fontWeight: '700',
+                            color: '#9333ea'
+                        }}>
+                            {(() => {
+                                const percentage = (stats?.totalScore / stats?.totalMarks) * 100;
+                                if (percentage === 100) return 'O';
+                                if (percentage >= 90) return 'E';
+                                if (percentage >= 80) return 'A';
+                                if (percentage >= 70) return 'B';
+                                if (percentage >= 60) return 'C';
+                                if (percentage >= 50) return 'D';
+                                return 'F';
+                            })()}
+                        </div>
+                        <small style={{
+                            fontSize: 'clamp(0.75rem, 2vw, 0.85rem)',
+                            color: '#6b21a8',
+                            opacity: 0.9
+                        }}>
+                            {(() => {
+                                const percentage = (stats?.totalScore / stats?.totalMarks) * 100;
+                                if (percentage === 100) return '(Outstanding)';
+                                if (percentage >= 90) return '(Excellent)';
+                                if (percentage >= 80) return '(Very Good)';
+                                if (percentage >= 70) return '(Good)';
+                                if (percentage >= 60) return '(Fair)';
+                                if (percentage >= 50) return '(Satisfactory)';
+                                return '(Failed)';
+                            })()}
+                        </small>
+                    </div>
+                </div>
                 </div>
 
                 {/* Question Analysis */}
@@ -272,7 +398,7 @@ export default function ExamComplete() {
                                     fontSize: 'clamp(0.8rem, 2.5vw, 0.9rem)',
                                     fontWeight: '500',
                                     marginTop: '1rem',
-                                    '@media (min-width: 640px)': {
+                                    '@media (minWidth: 640px)': {
                                         marginTop: 0,
                                         marginLeft: '1.5rem'
                                     }
@@ -319,6 +445,6 @@ export default function ExamComplete() {
                     </button>
                 </div>
             </div>
-        </div>
+        
     );
 }
