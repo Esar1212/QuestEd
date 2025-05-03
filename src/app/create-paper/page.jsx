@@ -52,7 +52,7 @@ const CreateQuestionPaper = () => {
     setQuestions(questions.filter((_, index) => index !== indexToDelete));
   };
   
-   const subject=localStorage.getItem("subject");
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
     const currentTotalMarks = calculateTotalQuestionMarks();
@@ -74,6 +74,7 @@ const CreateQuestionPaper = () => {
     setMessage("");
 
     try {
+       const subject=localStorage.getItem("subject");
       const response = await fetch("/api/createQuestionPaper", {
         method: "POST",
         headers: {
