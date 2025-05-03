@@ -13,7 +13,7 @@ const CreateQuestionPaper = () => {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
    const router= useRouter();
-  const subject=localStorage.getItem("subject");
+ 
   // Update the addQuestion function to include marks
   const addQuestion = () => {
     const currentTotalMarks = calculateTotalQuestionMarks();
@@ -52,7 +52,7 @@ const CreateQuestionPaper = () => {
     setQuestions(questions.filter((_, index) => index !== indexToDelete));
   };
   
-
+   const subject=localStorage.getItem("subject");
   const handleSubmit = async (e) => {
     e.preventDefault();
     const currentTotalMarks = calculateTotalQuestionMarks();
