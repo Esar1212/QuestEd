@@ -118,6 +118,54 @@ console.log(results);
                       : 'N/A'}
                   </p>
                 </div>
+                <div>
+                  <p style={{ color: '#9CA3AF' }}>Percentage</p>
+                  <p style={{ fontSize: '1.1rem' }}>
+                  {((result?.totalScore / result?.totalMarks) * 100).toFixed(1)}%
+                     </p>
+                </div>
+                {/* Add Grade Display */}
+                <div>
+                  <p style={{ color: '#9CA3AF' }}>Grade</p>
+                  <p style={{ 
+                    fontSize: '1.1rem',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.5rem' 
+                  }}>
+                    <span style={{ 
+                      color: '#ffffff', // Changed from #9333ea to white
+                      fontWeight: '600',
+                      fontSize: '1.2rem'
+                    }}>
+                      {(() => {
+                        const percentage = (result?.totalScore / result?.totalMarks) * 100;
+                        if (percentage === 100) return 'O';
+                        if (percentage >= 90) return 'E';
+                        if (percentage >= 80) return 'A';
+                        if (percentage >= 70) return 'B';
+                        if (percentage >= 60) return 'C';
+                        if (percentage >= 50) return 'D';
+                        return 'F';
+                      })()}
+                    </span>
+                    <span style={{ 
+                      color: 'rgba(255, 255, 255, 0.7)', // Changed from #6b21a8 to semi-transparent white
+                      fontSize: '0.9rem'
+                    }}>
+                      {(() => {
+                        const percentage = (result?.totalScore / result?.totalMarks) * 100;
+                        if (percentage === 100) return '(Outstanding)';
+                        if (percentage >= 90) return '(Excellent)';
+                        if (percentage >= 80) return '(Very Good)';
+                        if (percentage >= 70) return '(Good)';
+                        if (percentage >= 60) return '(Fair)';
+                        if (percentage >= 50) return '(Satisfactory)';
+                        return '(Failed)';
+                      })()}
+                    </span>
+                  </p>
+                </div>
               </div>
 
               <div style={{
