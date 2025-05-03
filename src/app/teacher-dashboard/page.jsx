@@ -78,7 +78,10 @@ export default function TeacherDashboard() {
             subject: authData.subject,
             qualification: authData.qualification
           });
-           localStorage.setItem("subject",userData.subject);
+          if (typeof window !== 'undefined' && authData.subject)
+          {
+           localStorage.setItem("subject",authData.subject);
+          }
           // Fetch subject-specific papers with student details
           const papersRes = await fetch('/api/getPapersBySubject', {
             credentials: 'include'
