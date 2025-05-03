@@ -8,7 +8,7 @@ import ThemeToggle from '@/components/ThemeToggle';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'QuestEd',
+  title: 'QuestED',
   description: 'Your trusted platform for conducting and taking online exams. We provide a seamless experience for both educators and students.',
   openGraph: {
      siteName: 'Online Examination Portal',
@@ -96,7 +96,7 @@ export default function RootLayout({
             <div className="nav-brand">
               <i className="fas fa-graduation-cap"></i>
               <span className="brand-text">
-                Quest<span className="brand-highlight">Ed</span>
+                Quest<span className="brand-highlight">ED</span>
               </span>
             </div>
             <div className="nav-links">
