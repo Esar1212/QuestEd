@@ -7,13 +7,13 @@ import { useRouter } from 'next/navigation';
 const CreateQuestionPaper = () => {
   const [questions, setQuestions] = useState([]);
   const [title, setTitle] = useState("");
-  const [subject, setSubject] = useState("");
   const [totalMarks, setTotalMarks] = useState("");
   const [timeLimit, setTimeLimit] = useState("");
   const [classStream, setClassStream] = useState("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
    const router= useRouter();
+  const subject=localStorage.getItem("subject");
   // Update the addQuestion function to include marks
   const addQuestion = () => {
     const currentTotalMarks = calculateTotalQuestionMarks();
@@ -91,7 +91,6 @@ const CreateQuestionPaper = () => {
       setMessage("Question Paper Created Successfully!");
       alert("Question paper created successfully");
       setTitle("");
-      setSubject("");
       setClassStream("");
       setTotalMarks("");
       setTimeLimit("");
@@ -227,15 +226,7 @@ const CreateQuestionPaper = () => {
             required
             className="inputField"
           />
-          <label className="heading">Your Department:</label>
-          <input 
-            type="text" 
-            value={subject} 
-            placeholder="Please enter the same department name which you are teaching" 
-            onChange={(e) => setSubject(e.target.value)} 
-            required
-            className="inputField"
-          />
+          
           <label className="heading">Class or Stream:</label>
           <input 
             type="text" 
