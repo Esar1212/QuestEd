@@ -454,16 +454,30 @@ export default function RegisterForm({ defaultUserType = 'student' }: RegisterFo
               
               <div className="form-group">
             <div className="input-group">
-              <input
-                type="text"
-                name="fullName"
-                pattern="[a-zA-Z\s]+"
-                placeholder="Department"
-                value={formData.subject}
-                onChange={(e)=>setFormData({...formData,subject:e.target.value})}
-                className={errors.subject ? 'error' : ''}
-              />
-              <i className="fas fa-book"></i>
+            <select
+                        name="subject"
+                        value={formData.subject}
+                        onChange={handleChange}
+                        className={errors.subject ? 'error' : ''}
+                      >
+                        <option value="">Select your department</option>
+                       <option value="Computer Science and Engineering">Computer Science and Engineering</option>
+                        <option value="Electronics and Communication Engineering">Electronics and Communication Engineering</option>
+                        <option value="Mechanical Engineering">Mechanical Engineering</option>
+                        <option value="Information Technology">Information Technology</option>
+                        <option value="Chemical Engineering">Chemical Engineering</option>
+                        <option value="Civil Engineering">Civil Engineering</option>
+                        <option value="Electrical Engineering">Electrical Engineering</option>
+                        <option value="Applied Electronics and Instrumentation Engineering">Applied Electronics and Instrumentation Engineering</option>
+                        <option value="Physics">Physics</option>
+                        <option value="Mathematics">Mathematics</option>
+                        <option value="Chemistry">Chemistry</option>
+                        <option value="Biology">Biology</option>
+                        <option value="History">History</option>
+                        <option value="Geography">Geography</option>
+                        
+                      </select>
+              
             </div>
             {errors.subject && <span className="error-message">{errors.subject}</span>}
           </div>
