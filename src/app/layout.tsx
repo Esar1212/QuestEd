@@ -8,7 +8,7 @@ import ThemeToggle from '@/components/ThemeToggle';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'QuestED',
+  title: 'QuestEd',
   description: 'Your trusted platform for conducting and taking online exams. We provide a seamless experience for both educators and students.',
   openGraph: {
      siteName: 'Online Examination Portal',
