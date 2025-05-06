@@ -96,7 +96,7 @@ export default function RootLayout({
             <div className="nav-brand">
               <i className="fas fa-graduation-cap"></i>
               <span className="brand-text">
-                Quest<span className="brand-highlight">ED</span>
+                Quest<span className="brand-highlight">Ed</span>
               </span>
             </div>
             <div className="nav-links">
