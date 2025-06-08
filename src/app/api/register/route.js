@@ -2,10 +2,12 @@ import { NextResponse } from 'next/server';
 import dbConnect from '../../../../lib/dbConnect';
 import Student from '../../../../models/Student';
 import Teacher from '../../../../models/Teacher';
+const sg= require('@sendgrid/mail');
 
 export async function POST(req) {
   await dbConnect();
-
+  sg.setApiKey(process.env.SENDGRID_API_KEY);
+ 
   try {
     const { userType, ...data } = await req.json();
 
@@ -43,7 +45,15 @@ export async function POST(req) {
     // Create user (password auto-hashed by model middleware)
     const Model = userType === 'student' ? Student : Teacher;
     const user = await Model.create(data);
-
+    const mail={
+      from: 'shubhradeeproy343@gmail.com',
+      to: user.email,
+      subject: 'Registration successful into QuestEd!' ,
+      text: `Thank you, ${user.fullName} for getting registered in our online examination website QuestEd.
+              Kindly stay tuned for upcoming updates`
+    }
+    await sg.send(mail);
+    console.log("Email sent");
     // Return safe user data (exclude password)
     return NextResponse.json({
       id: user._id,
