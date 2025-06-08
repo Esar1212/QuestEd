@@ -2,20 +2,22 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import Link from 'next/link';
-
+import Link from 'next/link'; 
 interface RegisterFormProps {
   defaultUserType?: 'student' | 'teacher';
 }
-
 export default function RegisterForm({ defaultUserType = 'student' }: RegisterFormProps) {
   const router = useRouter();
   const [userType, setUserType] = useState<'student' | 'teacher'>(defaultUserType);
   const [isCollegeStudent, setIsCollegeStudent] = useState(false);
   const [isLoading,setIsLoading]=useState(false);
+  const [showResend, setShowResend] = useState(false);
+  const [isOtpVerified,setIsOtpVerified]=useState(false);
+  const [isOtpGenerating,setIsOtpGenerating]=useState(false);
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
+    otp: '',
     password: '',
     confirmPassword: '',
     // Additional fields for teachers
@@ -32,7 +34,69 @@ export default function RegisterForm({ defaultUserType = 'student' }: RegisterFo
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-
+  const [isOtpSent, setIsOtpSent] = useState(false);
+  const storeOtp = async (email:string) => {
+    if (!email) {
+      alert("Please enter your email to generate OTP");
+      return;
+    }
+     const inotp = generateOTP();
+     setShowResend(true);
+      
+     try {
+      const res = await fetch('/api/auth/set-otp', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+              email: email,
+              otp: inotp
+          })
+      });
+      setIsOtpSent(true);
+    }catch(error)
+    {
+      console.error("OTP generation and storage failure!");
+    }
+    finally{
+      setIsOtpGenerating(false);
+    }
+  }
+  const verifyOTP = async (email: string, inotp: string) => {
+  try {
+    const res = await fetch('/api/auth/verify-otp', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        email: email,
+        otp: inotp
+      })
+    });
+    const data = await res.json();
+    if (res.ok && data.message === "OTP verified") {
+      return true;
+    } else {
+      // Pass the backend error message to the UI
+      setErrors(prev => ({
+        ...prev,
+        otp: data.error || "Invalid OTP"
+      }));
+      return false;
+    }
+  } catch (error) {
+    setErrors(prev => ({
+      ...prev,
+      otp: "OTP verification failed"
+    }));
+    return false;
+  }
+};
+  function generateOTP(length=6){
+    return Math.floor(Math.pow(10, length-1)+ Math.random()*9*Math.pow(10,length-1)).toString();
+  }
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
     
@@ -139,6 +203,8 @@ export default function RegisterForm({ defaultUserType = 'student' }: RegisterFo
             ...formData,
             email: ''
           });
+          setIsOtpVerified(false);
+          setIsOtpSent(false);
         }
 
         if (!response.ok) {
@@ -246,6 +312,26 @@ export default function RegisterForm({ defaultUserType = 'student' }: RegisterFo
           border-color: #ff4444;
           background-color: rgba(255, 68, 68, 0.05);
         }
+          
+    .verify-otp-button {
+      background-color: #28a745;
+      color: white;
+      padding: 8px 25px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+      margin-top: 10px;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 4px rgba(40, 167, 69, 0.2);
+    }
+
+    .verify-otp-button:hover {
+      background-color: #218838;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 6px rgba(40, 167, 69, 0.3);
+    }
       `}</style>
       <div className="register-card">
         <div className="register-header">
@@ -298,11 +384,100 @@ export default function RegisterForm({ defaultUserType = 'student' }: RegisterFo
                 value={formData.email}
                 onChange={handleChange}
                 className={errors.email ? 'error' : ''}
+                disabled={isOtpSent || isOtpVerified}
               />
-              <i className="fas fa-envelope"></i>
+              {!isOtpVerified && <i className="fas fa-envelope"></i>}
+              {isOtpVerified && <i className="fas fa-check-circle verified-icon"
+                style={{ color: '#28a745', marginLeft: '8px', fontSize: '1.2em' }}
+        title="Email verified"
+        ></i>}
             </div>
             {errors.email && <span className="error-message">{errors.email}</span>}
+             {!isOtpVerified && (
+            <button
+              type="button"
+              className="generate-otp-button"
+              disabled={isOtpSent|| isOtpGenerating}
+              onClick={()=>storeOtp(formData.email)}
+              style={{
+                backgroundColor: '#2a5298',
+                color: 'white',
+                padding: '10px 20px',
+                border: 'none',
+                borderRadius: '5px',
+                cursor: 'pointer',
+                fontSize: '14px',
+                fontWeight: '500',
+                marginTop: '10px',
+                width: '100%',
+                transition: 'all 0.3s ease',
+                opacity: isOtpSent || isOtpGenerating ? '0.7' : '1',
+                boxShadow: '0 2px 4px rgba(42, 82, 152, 0.2)'
+              }}
+            >
+               {isOtpGenerating
+      ? "Generating OTP ..."
+      : isOtpSent
+        ? "OTP Sent to your email! Your OTP will remain valid for only 5 mins. Kindly check your spam box if you couldn't find them"
+        : "Generate OTP"}
+            </button>
+             )}
           </div>
+
+          {isOtpSent && !isOtpVerified && (
+            <div className="form-group">
+              <div className="input-group">
+                <input
+                  type="text"
+                  name="otp"
+                  placeholder="Enter OTP"
+                  value={formData.otp}
+                  onChange={handleChange}
+                  className={errors.otp ? 'error' : ''}
+                />
+                <i className="fas fa-key"></i>
+              </div>
+              <div style={{ display: 'flex', gap: '16px', alignItems: 'center', marginTop: '10px' }}>
+  
+                <button type="button"
+  className="verify-otp-button"
+  onClick={async () => {
+    const isValid = await verifyOTP(formData.email, formData.otp);
+    if (isValid) {
+      alert("Email account verified successfully!");
+      setIsOtpVerified(true);
+      setIsOtpSent(false);
+      setFormData(prev => ({ ...prev, otp: '' }));
+      setShowResend(false); 
+      setErrors(prev => ({ ...prev, otp: '' }));
+    } else {
+      setFormData(prev => ({ ...prev, otp: '' }));
+      setShowResend(true); 
+    }
+  }}
+>
+  Verify
+</button>
+                 {showResend && (
+        <button
+          type="button"
+          className="verify-otp-button"
+          style={{ backgroundColor: "#2a5298" }}
+          disabled={isOtpGenerating}
+          onClick={async () => {
+            setIsOtpGenerating(true);
+            await storeOtp(formData.email);
+            setFormData(prev => ({ ...prev, otp: '' }));
+            setErrors(prev => ({ ...prev, otp: '' }));
+          }}
+        >
+          {isOtpGenerating ? "Resending..." : "Resend OTP"}
+        </button>
+      )}
+              </div>
+              {errors.otp && <span className="error-message">{errors.otp}</span>}
+            </div>
+          )}
 
           <div className="form-group">
             <div className="input-group">
@@ -518,9 +693,6 @@ export default function RegisterForm({ defaultUserType = 'student' }: RegisterFo
 }
 
          
-     
-
- 
 
               
            
