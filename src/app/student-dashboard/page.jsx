@@ -15,13 +15,11 @@ export default function StudentDashboard() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        console.log('Fetching auth data...'); // Add debug log
         const authRes = await fetch('/api/auth/verify', {
           credentials: 'include'
         });
 
         const authData = await authRes.json();
-        console.log('Auth data received:', authData); // Add debug log
 
         if (!authRes.ok || !authData.authenticated) {
           throw new Error(authData.error || 'Not authenticated');
