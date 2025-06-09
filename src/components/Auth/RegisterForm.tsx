@@ -37,10 +37,21 @@ export default function RegisterForm({ defaultUserType = 'student' }: RegisterFo
   const [isOtpSent, setIsOtpSent] = useState(false);
   const storeOtp = async (email:string) => {
     if (!email) {
-      alert("Please enter your email to generate OTP");
+      setErrors(prev => ({
+      ...prev,
+      email: "Please enter your email to generate OTP"
+    }));
       return;
     }
-     const inotp = generateOTP();
+     if (!/\S+@\S+\.\S+/.test(email)) {
+    setErrors(prev => ({
+      ...prev,
+      email: "Please enter a valid email"
+    }));
+    return;
+  }
+    
+    const inotp = generateOTP();
      setShowResend(true);
       
      try {
