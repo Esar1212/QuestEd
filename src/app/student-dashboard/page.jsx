@@ -313,49 +313,7 @@ export default function StudentDashboard() {
             flexDirection: 'column',
             gap: '0.75rem'
           }}>
-            <div style={{ 
-              display: 'flex', 
-              justifyContent: 'space-between', 
-              padding: '0.75rem',
-              background: 'rgba(42,82,152,0.05)',
-              borderRadius: '8px',
-              transition: 'all 0.3s ease',
-              position: 'relative',
-              overflow: 'hidden'
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.background = 'rgba(42,82,152,0.1)';
-              e.currentTarget.style.transform = 'translateX(5px)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.background = 'rgba(42,82,152,0.05)';
-              e.currentTarget.style.transform = 'translateX(0)';
-            }}>
-              <span style={{ 
-                color: '#4a5568', 
-                fontSize: '0.9rem',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '0.5rem'
-              }}>
-                <span style={{
-                  width: '4px',
-                  height: '4px',
-                  borderRadius: '50%',
-                  background: '#2a5298',
-                  boxShadow: '0 0 4px rgba(42,82,152,0.5)'
-                }} />
-                Student ID
-              </span>
-              <span style={{ 
-                fontWeight: 'bold', 
-                color: '#2a5298', 
-                fontSize: '0.9rem',
-                background: 'linear-gradient(135deg, #2a5298, #1e3c72)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent'
-              }}>{userData?.userId}</span>
-            </div>
+           
             
             <div style={{ 
               display: 'flex', 
@@ -389,7 +347,7 @@ export default function StudentDashboard() {
                   background: '#2a5298',
                   boxShadow: '0 0 4px rgba(42,82,152,0.5)'
                 }} />
-                Roll Number
+                Student Roll Number
               </span>
               <span style={{ 
                 fontWeight: 'bold', 
