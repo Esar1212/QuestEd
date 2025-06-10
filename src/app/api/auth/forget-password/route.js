@@ -52,7 +52,8 @@ export async function POST(request) {
                     <p style="color: #666;">If you didn't request this verification, please ignore this email.</p>
                 </div>
                 <div>
-                <p>Thank you for registering yourself in our online examination platform QuestEd as a ${userType}.Contact us if you want to reset your password</p>
+                <p>Thank you for registering yourself in our online examination platform QuestEd as a ${userType}.</p>
+                <p>On entering this code on the screen within 5 minutes, you will be securely redirected to reset password page.</p>
                 </div>
             `
         };
