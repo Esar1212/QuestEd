@@ -35,7 +35,6 @@ export async function POST(request) {
 
         const expiresAt = Date.now() + 5 * 60 * 1000;
         otpStore.set(email, { userType, otp, expiresAt });
-        console.log("STORING OTP:", { email, otp });
 
         // Email template
         const msg = {
