@@ -439,9 +439,7 @@ export default function LoginForm({ defaultUserType = 'student' }: LoginFormProp
     </button>
   </div>
     </div>
-                  </div>
-                </div>
-              </div>
+  </div>
               {passwordError && (
                 <div style={{ color: "red", marginBottom: "10px" }}>{passwordError}</div>
               )}
