@@ -9,7 +9,6 @@ export async function POST(request) {
         const { email,otp } = await request.json();
         const expiresAt = Date.now()+5*60*1000;
         otpStore.set(email,{otp,expiresAt});
-        console.log("STORING OTP:", { email, otp });
         // Validate input
         if (!email||!otp) {
             return NextResponse.json(
