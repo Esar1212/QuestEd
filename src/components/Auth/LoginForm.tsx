@@ -27,6 +27,7 @@ export default function LoginForm({ defaultUserType = 'student' }: LoginFormProp
   const [passwordError, setPasswordError] = useState('');
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const storeOtp = async (email:string,userType:string) => {
      const inotp = generateOTP();
@@ -383,59 +384,61 @@ export default function LoginForm({ defaultUserType = 'student' }: LoginFormProp
                 }}
               >
                 {/* New Password */}
-                <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
-                  <label style={{ marginBottom: "6px", fontWeight: 500 }}>New Password</label>
-                  <div style={{ display: "flex", alignItems: "center" }}>
-                    <input
-                      type={showNewPassword ? "text" : "password"}
-                      placeholder="New Password"
-                      value={newPassword}
-                      onChange={e => setNewPassword(e.target.value)}
-                      style={{
-                        padding: "8px 12px",
-                        border: "1px solid #ccc",
-                        borderRadius: "4px",
-                        fontSize: "1em",
-                        width: "200px"
-                      }}
-                    />
-                    <button
-                      type="button"
-                      className="password-toggle"
-                      onClick={() => setShowNewPassword(show => !show)}
-                      aria-label="Toggle password visibility"
-                      style={{ marginLeft: "8px" }}
-                    >
-                      <i className={`fas ${showNewPassword ? 'fa-eye-slash' : 'fa-eye'}`}></i>
-                    </button>
-                  </div>
-                </div>
-                {/* Confirm New Password */}
-                <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
-                  <label style={{ marginBottom: "6px", fontWeight: 500 }}>Confirm New Password</label>
-                  <div style={{ display: "flex", alignItems: "center" }}>
-                    <input
-                      type={showNewPassword ? "text" : "password"}
-                      placeholder="Confirm New Password"
-                      value={confirmPassword}
-                      onChange={e => setConfirmPassword(e.target.value)}
-                      style={{
-                        padding: "8px 12px",
-                        border: "1px solid #ccc",
-                        borderRadius: "4px",
-                        fontSize: "1em",
-                        width: "200px"
-                      }}
-                    />
-                    <button
-                      type="button"
-                      className="password-toggle"
-                      onClick={() => setShowPassword(show => !show)}
-                      aria-label="Toggle password visibility"
-                      style={{ marginLeft: "8px" }}
-                    >
-                      
-                    </button>
+<div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
+  <label style={{ marginBottom: "6px", fontWeight: 500 }}>New Password</label>
+  <div style={{ display: "flex", alignItems: "center" }}>
+    <input
+      type={showNewPassword ? "text" : "password"}
+      placeholder="New Password"
+      value={newPassword}
+      onChange={e => setNewPassword(e.target.value)}
+      style={{
+        padding: "8px 12px",
+        border: "1px solid #ccc",
+        borderRadius: "4px",
+        fontSize: "1em",
+        width: "200px"
+      }}
+    />
+    <button
+      type="button"
+      className="password-toggle"
+      onClick={() => setShowNewPassword(show => !show)}
+      aria-label="Toggle password visibility"
+      style={{ marginLeft: "8px" }}
+    >
+      <i className={`fas ${showNewPassword ? 'fa-eye-slash' : 'fa-eye'}`}></i>
+    </button>
+  </div>
+</div>
+{/* Confirm New Password */}
+<div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
+  <label style={{ marginBottom: "6px", fontWeight: 500 }}>Confirm New Password</label>
+  <div style={{ display: "flex", alignItems: "center" }}>
+    <input
+      type={showConfirmPassword ? "text" : "password"}
+      placeholder="Confirm New Password"
+      value={confirmPassword}
+      onChange={e => setConfirmPassword(e.target.value)}
+      style={{
+        padding: "8px 12px",
+        border: "1px solid #ccc",
+        borderRadius: "4px",
+        fontSize: "1em",
+        width: "200px"
+      }}
+    />
+    <button
+      type="button"
+      className="password-toggle"
+      onClick={() => setShowConfirmPassword(show => !show)}
+      aria-label="Toggle password visibility"
+      style={{ marginLeft: "8px" }}
+    >
+      <i className={`fas ${showConfirmPassword ? 'fa-eye-slash' : 'fa-eye'}`}></i>
+    </button>
+  </div>
+    </div>
                   </div>
                 </div>
               </div>
