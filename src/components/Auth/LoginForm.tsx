@@ -373,7 +373,6 @@ export default function LoginForm({ defaultUserType = 'student' }: LoginFormProp
           {/* Show set new password form after successful verification */}
           {isVerified && (
             <div style={{ textAlign: "center",margin: "2rem 0" }}>
-              <h1 style={{fontFamily: "cursive"}}><b>RESET  YOUR  PASSWORD</b></h1>
               <div
                 style={{
                   display: "flex",
