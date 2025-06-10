@@ -4,9 +4,7 @@ import otpStore from '../../../../../lib/otpStore';
 export async function POST(request) {
     try {
         const { email, otp } = await request.json();
-        console.log("VERIFY OTP:", { email, otp });
         const record = otpStore.get(email);
-        console.log("OTP STORE RECORD:", record);
 
         if (!record) {
             return NextResponse.json({ error: 'Code not found' }, { status: 400 });
