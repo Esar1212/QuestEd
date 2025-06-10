@@ -37,21 +37,10 @@ export default function RegisterForm({ defaultUserType = 'student' }: RegisterFo
   const [isOtpSent, setIsOtpSent] = useState(false);
   const storeOtp = async (email:string) => {
     if (!email) {
-      setErrors(prev => ({
-      ...prev,
-      email: "Please enter your email to generate OTP"
-    }));
+      alert("Please enter your email to generate OTP");
       return;
     }
-     if (!/\S+@\S+\.\S+/.test(email)) {
-    setErrors(prev => ({
-      ...prev,
-      email: "Please enter a valid email"
-    }));
-    return;
-  }
-    
-    const inotp = generateOTP();
+     const inotp = generateOTP();
      setShowResend(true);
       
      try {
@@ -622,6 +611,7 @@ export default function RegisterForm({ defaultUserType = 'student' }: RegisterFo
                     name="class"
                     placeholder="Class"
                     value={formData.class}
+                    onWheel={(e) => e.currentTarget.blur()}
                     onChange={handleChange}
                     className={errors.class ? 'error' : ''}
                   />
@@ -689,7 +679,13 @@ export default function RegisterForm({ defaultUserType = 'student' }: RegisterFo
             <div className="error-message text-center">{errors.submit}</div>
           )}
 
-          <button type="submit" className="register-button" disabled={isLoading}>
+          <button type="submit" className="register-button" disabled={isLoading}
+          onClick={e => {
+          if (!isOtpVerified) {
+           e.preventDefault();
+           alert("Email is not verified. Please verify your email by generating an OTP.");
+            }
+          }}>
             <i className="fas fa-user-plus"></i>
             { isLoading? "Registering...": `Register as ${userType}`}
           </button>
@@ -702,9 +698,3 @@ export default function RegisterForm({ defaultUserType = 'student' }: RegisterFo
     </div>
   );
 }
-
-         
-
-              
-           
-         
