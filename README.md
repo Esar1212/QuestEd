@@ -54,4 +54,8 @@ An advanced full-stack **Online Examination System** built using **Next.js**, **
   
 
 ---
-
+## Contributors
+- Shubhradeep Roy ( handling backend API routes , JWT authentication and frontend logic)
+- Rupam Manna ( handling frontend logic and UI)
+- Aastha Shree ( database integration )
+- Pranjal Bhattacharya ( UI designing )
