@@ -313,11 +313,15 @@ export default function ExamComplete() {
                             <div key={index} style={{
                                 padding: 'clamp(1rem, 3vw, 1.25rem)',
                                 borderRadius: '12px',
-                                background: q.isCorrect 
+                                background: q.type === "descriptive"
+                                  ? 'linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%)'
+                                  : (q.isCorrect 
                                     ? 'linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%)'
-                                    : 'linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%)',
+                                    : 'linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%)'),
                                 border: '1px solid',
-                                borderColor: q.isCorrect ? 'rgba(22,163,74,0.1)' : 'rgba(220,38,38,0.1)',
+                                borderColor: q.type === "descriptive"
+                                  ? 'rgba(22,163,74,0.1)'
+                                  : (q.isCorrect ? 'rgba(22,163,74,0.1)' : 'rgba(220,38,38,0.1)'),
                                 display: 'flex',
                                 justifyContent: 'space-between',
                                 alignItems: 'center',
@@ -330,10 +334,7 @@ export default function ExamComplete() {
                             onMouseLeave={(e) => {
                                 e.currentTarget.style.transform = 'translateX(0)';
                             }}>
-                                <div style={{ 
-                                    flex: 1,
-                                    minWidth: 0 // Prevent text overflow
-                                }}>
+                                <div style={{ flex: 1, minWidth: 0 }}>
                                     <div style={{
                                         display: 'flex',
                                         alignItems: 'center',
@@ -343,20 +344,24 @@ export default function ExamComplete() {
                                         <span style={{
                                             fontSize: '0.9rem',
                                             fontWeight: '600',
-                                            color: q.isCorrect ? '#16a34a' : '#dc2626'
+                                            color: q.type === "descriptive"
+                                              ? '#166534'
+                                              : (q.isCorrect ? '#16a34a' : '#dc2626')
                                         }}>
                                             Question {index + 1}
                                         </span>
-                                        <span style={{
+                                        {q.type !== "descriptive" && (
+                                          <span style={{
                                             display: 'flex',
                                             alignItems: 'center',
                                             gap: '0.25rem',
                                             fontSize: '0.9rem',
                                             color: q.isCorrect ? '#16a34a' : '#dc2626',
                                             fontWeight: '500'
-                                        }}>
+                                          }}>
                                             {q.isCorrect ? '✓ Correct' : '✕ Incorrect'}
-                                        </span>
+                                          </span>
+                                        )}
                                     </div>
                                     <p style={{
                                         fontSize: '0.95rem',
@@ -365,45 +370,64 @@ export default function ExamComplete() {
                                     }}>
                                         {q.question}
                                     </p>
-                                    <div style={{
+                                    {q.type === "descriptive" ? (
+                                      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', fontSize: '0.95rem' }}>
+                                        <span>
+                                          <strong>Your Answer:</strong> <span style={{ color: '#2563eb', fontWeight: 500 }}>{q.studentAnswer || 'Not attempted'}</span>
+                                        </span>
+                                        <span>
+                                          <strong>AI Feedback:</strong> <span style={{ color: '#9333ea', fontWeight: 500 }}>{q.feedback || 'No feedback'}</span>
+                                        </span>
+                                        <span>
+                                          <strong>Answer provided by your teacher:</strong> <span style={{ color: '#16a34a', fontWeight: 500 }}>{q.correctAnswer}</span>
+                                        </span>
+                                        <span>
+                                          <strong>Marks:</strong> <span style={{ color: '#ea580c', fontWeight: 500 }}>{q.score} / {q.marks}</span>
+                                        </span>
+                                      </div>
+                                    ) : (
+                                      <div style={{
                                         display: 'flex',
                                         gap: '1rem',
                                         fontSize: '0.9rem'
-                                    }}>
+                                      }}>
                                         <span style={{
-                                            color: '#4b5563'
+                                          color: '#4b5563'
                                         }}>
-                                            Your Answer: <span style={{
-                                                color: q.isCorrect ? '#16a34a' : '#dc2626',
-                                                fontWeight: '500'
-                                            }}>{q.selectedOption || 'Not attempted'}</span>
+                                          Your Answer: <span style={{
+                                            color: q.isCorrect ? '#16a34a' : '#dc2626',
+                                            fontWeight: '500'
+                                          }}>{q.selectedOption || 'Not attempted'}</span>
                                         </span>
                                         {!q.isCorrect && (
-                                            <span style={{
-                                                color: '#4b5563'
-                                            }}>
-                                                Correct Answer: <span style={{
-                                                    color: '#16a34a',
-                                                    fontWeight: '500'
-                                                }}>{q.correctOption}</span>
-                                            </span>
+                                          <span style={{
+                                            color: '#4b5563'
+                                          }}>
+                                            Correct Answer: <span style={{
+                                              color: '#16a34a',
+                                              fontWeight: '500'
+                                            }}>{q.correctOption}</span>
+                                          </span>
                                         )}
-                                    </div>
+                                      </div>
+                                    )}
                                 </div>
                                 <div style={{
-                                    background: q.isCorrect ? '#16a34a' : '#dc2626',
-                                    color: 'white',
-                                    padding: '0.5rem clamp(0.75rem, 2vw, 1rem)',
-                                    borderRadius: '999px',
-                                    fontSize: 'clamp(0.8rem, 2.5vw, 0.9rem)',
-                                    fontWeight: '500',
-                                    marginTop: '1rem',
-                                    '@media (minWidth: 640px)': {
-                                        marginTop: 0,
-                                        marginLeft: '1.5rem'
-                                    }
+                                  background: q.type === "descriptive"
+                                    ? '#16a34a'
+                                    : (q.isCorrect ? '#16a34a' : '#dc2626'),
+                                  color: 'white',
+                                  padding: '0.5rem clamp(0.75rem, 2vw, 1rem)',
+                                  borderRadius: '999px',
+                                  fontSize: 'clamp(0.8rem, 2.5vw, 0.9rem)',
+                                  fontWeight: '500',
+                                  marginTop: '1rem',
+                                  '@media (minWidth: 640px)': {
+                                    marginTop: 0,
+                                    marginLeft: '1.5rem'
+                                  }
                                 }}>
-                                    {q.marks} marks
+                                  {q.marks} marks
                                 </div>
                             </div>
                         ))}
