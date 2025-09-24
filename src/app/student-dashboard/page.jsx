@@ -313,7 +313,7 @@ export default function StudentDashboard() {
             flexDirection: 'column',
             gap: '0.75rem'
           }}>
-           
+
             
             <div style={{ 
               display: 'flex', 
@@ -347,7 +347,7 @@ export default function StudentDashboard() {
                   background: '#2a5298',
                   boxShadow: '0 0 4px rgba(42,82,152,0.5)'
                 }} />
-                Student Roll Number
+                Roll Number
               </span>
               <span style={{ 
                 fontWeight: 'bold', 
