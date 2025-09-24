@@ -1,276 +1,293 @@
 'use client'
 import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 
-const Results = () => {
-  const [results, setResults] = useState([])
-  const [loading, setLoading] = useState(true)
+const ExamPapers = () => {
+  const [papers, setPapers] = useState([])
+  const [completedPapers, setCompletedPapers] = useState([])
+  const router = useRouter()
 
   useEffect(() => {
-    const fetchResults = async () => {
+    const fetchData = async () => {
       try {
-        const response = await fetch('/api/getCompletedPapers')
-        const data = await response.json()
-        if (Array.isArray(data)) {
-          const formattedResults = data.map(result => ({
-            _id: result._id,
-            paperId: result.paperId,
-            title: result.title,
-            subject: result.subject,
-            totalScore: result.totalScore,
-            totalMarks: result.totalMarks,
-            questions: result.questions,
-            completedAt: result.completedAt
-          }))
-          setResults(formattedResults)
-        } else {
-          setResults([])
-        }
-        setLoading(false)
+        // Fetch papers
+        const papersResponse = await fetch('/api/getPapersByClass')
+        const papersData = await papersResponse.json()
+        setPapers(papersData)
+
+        // Fetch completed papers
+        const solutionsResponse = await fetch('/api/getCompletedPapers')
+        const solutionsData = await solutionsResponse.json()
+        console.log(solutionsData);
+        setCompletedPapers(solutionsData.map(solution => solution.paperId))
       } catch (error) {
-        console.error('Error fetching results:', error)
-        setResults([])
-        setLoading(false)
+        console.error('Error fetching data:', error)
       }
     }
 
-    fetchResults()
+    fetchData()
   }, [])
-console.log(results);
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-900">
-        <div className="text-white text-2xl">Loading results...</div>
-      </div>
-    )
+
+  const handlePaperClick = (paperId) => {
+    localStorage.setItem('selectedPaperId', paperId);
+    router.push('/ExamInterface');
   }
 
   return (
-    <div style={{
+    <div className="container-fluid" style={{
       paddingTop: '6rem',
+      paddingLeft: '2rem',
+      paddingRight: '2rem',
+      paddingBottom: '2rem',
+      maxWidth: '100%',
+      marginTop: '0',
+      marginRight: '0',
+      marginBottom: '0',
+      marginLeft: '0',
       minHeight: '100vh',
-      background: '#1a1a1a',
-      color: 'white'
+      background: '#1a1a1a'
     }}>
       <div style={{
-        maxWidth: '1200px',
-        margin: '0 auto',
-        padding: '0 2rem'
+        maxWidth: '1400px',
+        marginLeft: 'auto',
+        marginRight: 'auto'
       }}>
         <h1 style={{
           fontSize: '2.5rem',
-          textAlign: 'center',
-          marginBottom: '3rem',
+          marginBottom: '2rem', // Reduced margin
+          color: 'white',
           fontWeight: 'bold',
+          textAlign: 'center',
           textShadow: '2px 2px 4px rgba(0,0,0,0.3)'
         }}>
-          Your Exam Results
+          Available Exam Papers
         </h1>
 
         <div style={{
-          display: 'grid',
-          gap: '2rem',
+          background: 'rgba(255, 255, 255, 0.1)',
+          borderRadius: '12px',
+          padding: '2rem',
+          marginBottom: '3rem',
+          backdropFilter: 'blur(10px)',
+          border: '1px solid rgba(255, 255, 255, 0.2)',
         }}>
-          {results.map((result) => (
-            <div
-              key={result?._id || Math.random()}
+          <h2 style={{
+            fontSize: '1.5rem',
+            color: '#ffffff',
+            marginBottom: '1.5rem',
+            textAlign: 'center',
+            fontWeight: '600'
+          }}>
+            Exam Instructions
+          </h2>
+          <ul style={{
+            color: '#ffffff',
+            listStyle: 'none',
+            padding: '0',
+            margin: '0',
+            display: 'grid',
+            gap: '1rem'
+          }}>
+            <li style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.75rem',
+              fontSize: '1.1rem'
+            }}>
+              <span style={{ color: '#4CAF50' }}>•</span>
+              Once you start the exam, the timer cannot be paused.
+            </li>
+            <li style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.75rem',
+              fontSize: '1.1rem'
+            }}>
+              <span style={{ color: '#4CAF50' }}>•</span>
+              Do not refresh the browser during exam. The timer won't be reset but you would lose your progress.
+            </li>
+            <li style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.75rem',
+              fontSize: '1.1rem'
+            }}>
+              <span style={{ color: '#4CAF50' }}>•</span>
+              Do not close the browser during the exam. The exam will be auto-submitted in that case.
+            </li>
+            
+            <li style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.75rem',
+              fontSize: '1.1rem'
+            }}>
+              <span style={{ color: '#4CAF50' }}>•</span>
+              Submit your answers before the timer runs out.
+            </li>
+            <li style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.75rem',
+              fontSize: '1.1rem'
+            }}>
+              <span style={{ color: '#4CAF50' }}>•</span>
+              <b>You are not permitted to change tabs. The exam will be auto-submitted in that case.</b> 
+            </li>
+            <li style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.75rem',
+              fontSize: '1.1rem'
+            }}>
+              <span style={{ color: '#4CAF50' }}>•</span>
+              You can review and change your answers before final submission.
+            </li>
+          </ul>
+        </div>
+
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))',
+          gap: '2rem',
+          padding: '1rem'
+        }}>
+          {papers.map((paper) => (
+            <div 
+              key={paper._id}
+              onClick={() => !completedPapers.includes(paper._id) && handlePaperClick(paper._id)}
               style={{
-                background: 'rgba(255, 255, 255, 0.1)',
-                borderRadius: '12px',
+                backgroundColor: 'white',
+                borderRadius: '20px',
+                boxShadow: '0 10px 30px rgba(0,0,0,0.1)',
                 padding: '2rem',
+                transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+                cursor: completedPapers.includes(paper._id) ? 'not-allowed' : 'pointer',
+                border: '1px solid rgba(255,255,255,0.1)',
+                background: completedPapers.includes(paper._id) 
+                  ? 'linear-gradient(145deg, #f8f9fa, #e9ecef)'
+                  : 'linear-gradient(145deg, #ffffff, #f8f9fa)',
+                position: 'relative',
+                overflow: 'hidden',
                 backdropFilter: 'blur(10px)',
-                border: '1px solid rgba(255, 255, 255, 0.2)',
+                WebkitBackdropFilter: 'blur(10px)'
+              }}
+              onMouseEnter={(e) => {
+                if (!completedPapers.includes(paper._id)) {
+                  e.currentTarget.style.transform = 'translateY(-10px) scale(1.02)';
+                  e.currentTarget.style.boxShadow = '0 20px 40px rgba(0,0,0,0.15)';
+                }
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = 'translateY(0) scale(1)';
+                e.currentTarget.style.boxShadow = '0 10px 30px rgba(0,0,0,0.1)';
               }}
             >
+              {/* Decorative gradient overlay */}
               <div style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                marginBottom: '1.5rem',
-                borderBottom: '1px solid rgba(255, 255, 255, 0.2)',
-                paddingBottom: '1rem'
-              }}>
-                <h2 style={{ fontSize: '1.8rem', fontWeight: '600' }}>{result?.title || 'Untitled Exam'}</h2>
-                <span style={{
-                  background: '#4CAF50',
-                  padding: '0.5rem 1rem',
-                  borderRadius: '999px',
-                  fontSize: '1.1rem'
-                }}>
-                  Score: {result?.totalScore || 0}/{result?.totalMarks || 0}
-                </span>
-              </div>
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                right: 0,
+                height: '4px',
+                background: completedPapers.includes(paper._id)
+                  ? 'linear-gradient(90deg, #6c757d, #adb5bd)'
+                  : 'linear-gradient(90deg, #2a5298, #4CAF50)',
+                opacity: 0.8
+              }} />
 
+              {/* Card content */}
               <div style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-                gap: '1.5rem',
-                marginBottom: '1.5rem'
+                position: 'relative',
+                zIndex: 1
               }}>
-                <div>
-                  <p style={{ color: '#9CA3AF' }}>Subject</p>
-                  <p style={{ fontSize: '1.1rem' }}>{result?.subject || 'N/A'}</p>
-                </div>
-                <div>
-                  <p style={{ color: '#9CA3AF' }}>Completion Time</p>
-                  <p style={{ fontSize: '1.1rem' }}>
-                    {result?.completedAt ? 
-                      `${new Date(result.completedAt).toLocaleDateString()} ${new Date(result.completedAt).toLocaleTimeString()}` 
-                      : 'N/A'}
-                  </p>
-                </div>
-                <div>
-                  <p style={{ color: '#9CA3AF' }}>Percentage</p>
-                  <p style={{ fontSize: '1.1rem' }}>
-                  {((result?.totalScore / result?.totalMarks) * 100).toFixed(1)}%
-                     </p>
-                </div>
-                {/* Add Grade Display */}
-                <div>
-                  <p style={{ color: '#9CA3AF' }}>Grade</p>
-                  <p style={{ 
-                    fontSize: '1.1rem',
+                <h3 style={{
+                  fontSize: '1.5rem',
+                  fontWeight: '600',
+                  color: completedPapers.includes(paper._id) ? '#6c757d' : '#2a5298',
+                  marginBottom: '1.5rem',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.75rem'
+                }}>
+                  <span style={{
+                    fontSize: '1.75rem',
+                    opacity: 0.9
+                  }}>
+                    {completedPapers.includes(paper._id) ? '✓' : '📝'}
+                  </span>
+                  {paper.title}
+                </h3>
+
+                <div style={{
+                  display: 'grid',
+                  gap: '1rem',
+                  marginBottom: '1.5rem'
+                }}>
+                  <p style={{
+                    color: '#4a5568',
+                    fontSize: '1rem',
+                    fontWeight: '500',
                     display: 'flex',
                     alignItems: 'center',
-                    gap: '0.5rem' 
+                    gap: '0.5rem'
                   }}>
-                    <span style={{ 
-                      color: '#ffffff', // Changed from #9333ea to white
-                      fontWeight: '600',
-                      fontSize: '1.2rem'
-                    }}>
-                      {(() => {
-                        const percentage = (result?.totalScore / result?.totalMarks) * 100;
-                        if (percentage === 100) return 'O';
-                        if (percentage >= 90) return 'E';
-                        if (percentage >= 80) return 'A';
-                        if (percentage >= 70) return 'B';
-                        if (percentage >= 60) return 'C';
-                        if (percentage >= 50) return 'D';
-                        return 'F';
-                      })()}
-                    </span>
-                    <span style={{ 
-                      color: 'rgba(255, 255, 255, 0.7)', // Changed from #6b21a8 to semi-transparent white
-                      fontSize: '0.9rem'
-                    }}>
-                      {(() => {
-                        const percentage = (result?.totalScore / result?.totalMarks) * 100;
-                        if (percentage === 100) return '(Outstanding)';
-                        if (percentage >= 90) return '(Excellent)';
-                        if (percentage >= 80) return '(Very Good)';
-                        if (percentage >= 70) return '(Good)';
-                        if (percentage >= 60) return '(Fair)';
-                        if (percentage >= 50) return '(Satisfactory)';
-                        return '(Failed)';
-                      })()}
-                    </span>
+                    <span style={{ opacity: 0.7 }}>❓</span>
+                    Questions: {paper.questions.length}
+                  </p>
+                  <p style={{
+                    color: '#4a5568',
+                    fontSize: '1rem',
+                    fontWeight: '500',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.5rem'
+                  }}>
+                    <span style={{ opacity: 0.7 }}>🎯</span>
+                    Total Marks: {paper.totalMarks}
+                  </p>
+                  <p style={{
+                    color: '#4a5568',
+                    fontSize: '1rem',
+                    fontWeight: '500',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.5rem'
+                  }}>
+                    <span style={{ opacity: 0.7 }}>⏱️</span>
+                    Time Limit: {paper.timeLimit} min
                   </p>
                 </div>
-              </div>
 
-              <div style={{
-                background: 'rgba(0, 0, 0, 0.2)',
-                borderRadius: '8px',
-                padding: '1.5rem',
-                marginTop: '1.5rem'
-              }}>
-                <h3 style={{ 
-                  marginBottom: '1.5rem', 
-                  fontSize: '1.2rem',
-                  borderBottom: '1px solid rgba(255, 255, 255, 0.2)',
-                  paddingBottom: '0.5rem'
-                }}>Question Analysis</h3>
-                
-                {result?.questions?.map((question, index) => (
-                  <div key={question.questionId} style={{
-                    background: 'rgba(255, 255, 255, 0.05)',
-                    borderRadius: '8px',
-                    padding: '1.5rem',
-                    marginBottom: '1rem'
-                  }}>
-                    <div style={{
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      marginBottom: '1rem'
-                    }}>
-                      <h4 style={{ fontSize: '1.1rem', fontWeight: '500' }}>
-                        Question {index + 1}
-                      </h4>
-                      {question.type === "descriptive" ? (
-                        <span style={{
-                          padding: '0.25rem 0.75rem',
-                          borderRadius: '999px',
-                          fontSize: '0.9rem',
-                          background: '#6366f1',
-                          color: 'white'
-                        }}>
-                          Descriptive
-                        </span>
-                      ) : (
-                        <span style={{
-                          padding: '0.25rem 0.75rem',
-                          borderRadius: '999px',
-                          fontSize: '0.9rem',
-                          background: question.isCorrect ? '#4CAF50' : '#FF5252',
-                          color: 'white'
-                        }}>
-                          {question.isCorrect ? 'Correct' : 'Incorrect'}
-                        </span>
-                      )}
-                    </div>
-                    
-                    <p style={{ 
-                      marginBottom: '1rem',
-                      color: '#E0E0E0'
-                    }}>{question.question}</p>
-                    
-                    {question.type === "descriptive" ? (
-                      <div style={{
-                        display: 'grid',
-                        gap: '0.5rem',
-                        marginTop: '1rem'
-                      }}>
-                        <div style={{ color: '#9CA3AF' }}>
-                          <span style={{ fontWeight: '500' }}>Your Answer: </span>
-                          <span style={{ color: '#60a5fa' }}>{question.studentAnswer || 'Not answered'}</span>
-                        </div>
-                        <div style={{ color: '#9CA3AF' }}>
-                          <span style={{ fontWeight: '500' }}>Answer provided by your teacher: </span>
-                          <span style={{ color: '#4CAF50' }}>{question.correctAnswer}</span>
-                        </div>
-                        <div style={{ color: '#9CA3AF' }}>
-                          <span style={{ fontWeight: '500' }}>AI Feedback: </span>
-                          <span style={{ color: '#fbbf24' }}>{question.feedback || 'No feedback'}</span>
-                        </div>
-                        <div style={{ color: '#9CA3AF' }}>
-                          <span style={{ fontWeight: '500' }}>Marks: </span>
-                          <span>{typeof question.score === 'number' ? question.score : 0}/{question.marks}</span>
-                        </div>
-                      </div>
-                    ) : (
-                      <div style={{
-                        display: 'grid',
-                        gap: '0.5rem',
-                        marginTop: '1rem'
-                      }}>
-                        <div style={{ color: '#9CA3AF' }}>
-                          <span style={{ fontWeight: '500' }}>Your Answer: </span>
-                          <span style={{
-                            color: question.isCorrect ? '#4CAF50' : '#FF5252'
-                          }}>{question.selectedOption || 'Not answered'}</span>
-                        </div>
-                        <div style={{ color: '#9CA3AF' }}>
-                          <span style={{ fontWeight: '500' }}>Correct Answer: </span>
-                          <span style={{ color: '#4CAF50' }}>{question.correctOption}</span>
-                        </div>
-                        <div style={{ color: '#9CA3AF' }}>
-                          <span style={{ fontWeight: '500' }}>Marks: </span>
-                          <span>{question.isCorrect ? question.marks : 0}/{question.marks}</span>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                ))}
+                <div style={{
+                  background: completedPapers.includes(paper._id)
+                    ? 'linear-gradient(145deg, #6c757d, #adb5bd)'
+                    : 'linear-gradient(145deg, #2a5298, #4CAF50)',
+                  color: 'white',
+                  padding: '0.75rem 1.5rem',
+                  borderRadius: '999px',
+                  fontSize: '0.95rem',
+                  fontWeight: '600',
+                  textAlign: 'center',
+                  transition: 'all 0.3s ease',
+                  boxShadow: '0 4px 15px rgba(0,0,0,0.1)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '0.5rem'
+                }}>
+                  {completedPapers.includes(paper._id) ? (
+                    <>
+                      <span style={{ opacity: 0.9 }}>✓</span>
+                      Already Completed
+                    </>
+                  ) : (
+                    <>
+                      <span style={{ opacity: 0.9 }}>🚀</span>
+                      Start Exam
+                    </>
+                  )}
+                </div>
               </div>
             </div>
           ))}
@@ -280,4 +297,4 @@ console.log(results);
   )
 }
 
-export default Results
+export default ExamPapers
