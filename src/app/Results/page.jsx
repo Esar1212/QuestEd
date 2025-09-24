@@ -196,15 +196,27 @@ console.log(results);
                       <h4 style={{ fontSize: '1.1rem', fontWeight: '500' }}>
                         Question {index + 1}
                       </h4>
-                      <span style={{
-                        padding: '0.25rem 0.75rem',
-                        borderRadius: '999px',
-                        fontSize: '0.9rem',
-                        background: question.isCorrect ? '#4CAF50' : '#FF5252',
-                        color: 'white'
-                      }}>
-                        {question.isCorrect ? 'Correct' : 'Incorrect'}
-                      </span>
+                      {question.type === "descriptive" ? (
+                        <span style={{
+                          padding: '0.25rem 0.75rem',
+                          borderRadius: '999px',
+                          fontSize: '0.9rem',
+                          background: '#6366f1',
+                          color: 'white'
+                        }}>
+                          Descriptive
+                        </span>
+                      ) : (
+                        <span style={{
+                          padding: '0.25rem 0.75rem',
+                          borderRadius: '999px',
+                          fontSize: '0.9rem',
+                          background: question.isCorrect ? '#4CAF50' : '#FF5252',
+                          color: 'white'
+                        }}>
+                          {question.isCorrect ? 'Correct' : 'Incorrect'}
+                        </span>
+                      )}
                     </div>
                     
                     <p style={{ 
@@ -212,28 +224,51 @@ console.log(results);
                       color: '#E0E0E0'
                     }}>{question.question}</p>
                     
-                    <div style={{
-                      display: 'grid',
-                      gap: '0.5rem',
-                      marginTop: '1rem'
-                    }}>
-                      <div style={{ color: '#9CA3AF' }}>
-                        <span style={{ fontWeight: '500' }}>Your Answer: </span>
-                        <span style={{
-                          color: question.isCorrect ? '#4CAF50' : '#FF5252'
-                        }}>{question.selectedOption || 'Not answered'}</span>
+                    {question.type === "descriptive" ? (
+                      <div style={{
+                        display: 'grid',
+                        gap: '0.5rem',
+                        marginTop: '1rem'
+                      }}>
+                        <div style={{ color: '#9CA3AF' }}>
+                          <span style={{ fontWeight: '500' }}>Your Answer: </span>
+                          <span style={{ color: '#60a5fa' }}>{question.studentAnswer || 'Not answered'}</span>
+                        </div>
+                        <div style={{ color: '#9CA3AF' }}>
+                          <span style={{ fontWeight: '500' }}>Answer provided by your teacher: </span>
+                          <span style={{ color: '#4CAF50' }}>{question.correctAnswer}</span>
+                        </div>
+                        <div style={{ color: '#9CA3AF' }}>
+                          <span style={{ fontWeight: '500' }}>AI Feedback: </span>
+                          <span style={{ color: '#fbbf24' }}>{question.feedback || 'No feedback'}</span>
+                        </div>
+                        <div style={{ color: '#9CA3AF' }}>
+                          <span style={{ fontWeight: '500' }}>Marks: </span>
+                          <span>{typeof question.score === 'number' ? question.score : 0}/{question.marks}</span>
+                        </div>
                       </div>
-                      
-                      <div style={{ color: '#9CA3AF' }}>
-                        <span style={{ fontWeight: '500' }}>Correct Answer: </span>
-                        <span style={{ color: '#4CAF50' }}>{question.correctOption}</span>
+                    ) : (
+                      <div style={{
+                        display: 'grid',
+                        gap: '0.5rem',
+                        marginTop: '1rem'
+                      }}>
+                        <div style={{ color: '#9CA3AF' }}>
+                          <span style={{ fontWeight: '500' }}>Your Answer: </span>
+                          <span style={{
+                            color: question.isCorrect ? '#4CAF50' : '#FF5252'
+                          }}>{question.selectedOption || 'Not answered'}</span>
+                        </div>
+                        <div style={{ color: '#9CA3AF' }}>
+                          <span style={{ fontWeight: '500' }}>Correct Answer: </span>
+                          <span style={{ color: '#4CAF50' }}>{question.correctOption}</span>
+                        </div>
+                        <div style={{ color: '#9CA3AF' }}>
+                          <span style={{ fontWeight: '500' }}>Marks: </span>
+                          <span>{question.isCorrect ? question.marks : 0}/{question.marks}</span>
+                        </div>
                       </div>
-                      
-                      <div style={{ color: '#9CA3AF' }}>
-                        <span style={{ fontWeight: '500' }}>Marks: </span>
-                        <span>{question.isCorrect ? question.marks : 0}/{question.marks}</span>
-                      </div>
-                    </div>
+                    )}
                   </div>
                 ))}
               </div>
