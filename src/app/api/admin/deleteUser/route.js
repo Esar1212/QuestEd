@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import Student from '../../../../../models/Student';
+import Solution from '../../../../../models/Solution';
 import Teacher from '../../../../../models/Teacher';
 import dbConnect from '../../../../../lib/dbConnect';
 
@@ -18,6 +19,8 @@ export async function DELETE(request) {
         let deletedUser;
         if (userType === 'student') {
             deletedUser = await Student.findByIdAndDelete(userId);
+            await Solution.deleteMany({ studentId: userId });
+
         } else if (userType === 'teacher') {
             deletedUser = await Teacher.findByIdAndDelete(userId);
         } else {
