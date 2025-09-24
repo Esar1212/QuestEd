@@ -12,32 +12,61 @@ const CreateQuestionPaper = () => {
   const [classStream, setClassStream] = useState("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
-   const router= useRouter();
+  const [showTypeModal, setShowTypeModal] = useState(false);
+  const [pendingAdd, setPendingAdd] = useState(false);
+  const router= useRouter();
  
   // Update the addQuestion function to include marks
   const addQuestion = () => {
+    setShowTypeModal(true);
+    setPendingAdd(true);
+  };
+
+  // New function to actually add the question after type selection
+  const handleAddQuestionWithType = (type) => {
     const currentTotalMarks = calculateTotalQuestionMarks();
     const remainingMarks = parseInt(totalMarks) - currentTotalMarks;
 
     if (questions.length > 0) {
       const lastQuestion = questions[questions.length - 1];
-      if (!lastQuestion.options.includes(lastQuestion.answer)) {
+      if (
+        lastQuestion.type === "mcq" &&
+        (!Array.isArray(lastQuestion.options) || !lastQuestion.options.includes(lastQuestion.answer))
+      ) {
         alert("The correct answer must match one of the options in the previous question!");
+        setShowTypeModal(false);
+        setPendingAdd(false); // <-- add here
         return;
       }
     }
-    
+
     if (remainingMarks <= 0) {
       alert("Cannot add more questions. Total marks limit reached!");
+      setShowTypeModal(false);
+      setPendingAdd(false); // <-- add here
       return;
     }
-    setQuestions([...questions, { 
-      question: "", 
-      options: ["", "", "", ""], 
-      answer: "", 
-      marks: "" 
-    }]);
+
+    if (type === "mcq") {
+      setQuestions([...questions, { 
+        type: "mcq",
+        question: "", 
+        options: ["", "", "", ""], 
+        answer: "", 
+        marks: "" 
+      }]);
+    } else {
+      setQuestions([...questions, { 
+        type: "descriptive",
+        question: "", 
+        answer: "", 
+        marks: "" 
+      }]);
+    }
+    setShowTypeModal(false);
+    setPendingAdd(false); // <-- add here
   };
+
   const calculateTotalQuestionMarks = () => {
     return questions.reduce((sum, q) => sum + (parseInt(q.marks) || 0), 0);
   };
@@ -48,7 +77,7 @@ const CreateQuestionPaper = () => {
     setQuestions(updatedQuestions);
   };
   
-   const deleteQuestion = (indexToDelete) => {
+  const deleteQuestion = (indexToDelete) => {
     setQuestions(questions.filter((_, index) => index !== indexToDelete));
   };
   
@@ -58,19 +87,23 @@ const CreateQuestionPaper = () => {
     const currentTotalMarks = calculateTotalQuestionMarks();
     const remainingMarks = parseInt(totalMarks) - currentTotalMarks;
 
-    if (questions.length > 0) {
-      const lastQuestion = questions[questions.length - 1];
-      if (!lastQuestion.options.includes(lastQuestion.answer)) {
-        alert("The correct answer must match one of the options in the previous question!");
-        return;
-      }
-    }
+   if (questions.length > 0) {
+  const lastQuestion = questions[questions.length - 1];
+  if (
+    lastQuestion.type === "mcq" &&
+    (!Array.isArray(lastQuestion.options) || !lastQuestion.options.includes(lastQuestion.answer))
+  ) {
+    alert("The correct answer must match one of the options in the previous question!");
+    return;
+  }
+}
     
     if (remainingMarks > 0) {
       alert("Cannot submit the question paper! Please add more questions to reach the total marks limit!");
       return;
     }
     setLoading(true);
+    
     setMessage("");
 
     try {
@@ -281,31 +314,47 @@ const CreateQuestionPaper = () => {
               required
               className="inputField"
             />
-            <label className="heading">Options:</label>
-            {q.options.map((opt, optIndex) => (
-              <input 
-                key={optIndex} 
-                type="text" 
-                placeholder={`Option ${optIndex + 1}`} 
-                value={opt} 
-                onChange={(e) => {
-                  const newOptions = [...q.options];
-                  newOptions[optIndex] = e.target.value;
-                  updateQuestion(index, "options", newOptions);
-                }} 
-                required
-                className="inputField"
-              />
-            ))}
-            <label className="heading">Type the correct answer here:</label>
-            <input 
-              type="text" 
-              placeholder="Correct Answer" 
-              value={q.answer} 
-              onChange={(e) => updateQuestion(index, "answer", e.target.value)} 
-              required
-              className="inputField"
-            />
+            {q.type === "mcq" ? (
+              <>
+                <label className="heading">Options:</label>
+                {q.options.map((opt, optIndex) => (
+                  <input 
+                    key={optIndex} 
+                    type="text" 
+                    placeholder={`Option ${optIndex + 1}`} 
+                    value={opt} 
+                    onChange={(e) => {
+                      const newOptions = [...q.options];
+                      newOptions[optIndex] = e.target.value;
+                      updateQuestion(index, "options", newOptions);
+                    }} 
+                    required
+                    className="inputField"
+                  />
+                ))}
+                <label className="heading">Type the correct answer here:</label>
+                <input 
+                  type="text" 
+                  placeholder="Correct Answer" 
+                  value={q.answer} 
+                  onChange={(e) => updateQuestion(index, "answer", e.target.value)} 
+                  required
+                  className="inputField"
+                />
+              </>
+            ) : (
+              <>
+                <label className="heading">Answer:</label>
+                <textarea
+                  placeholder="Type the answer here"
+                  value={q.answer}
+                  onChange={e => updateQuestion(index, "answer", e.target.value)}
+                  required
+                  className="inputField"
+                  style={{ minHeight: "80px" }}
+                />
+              </>
+            )}
             <label className="heading">Marks allotted:</label>
             <input 
               type="number" 
@@ -377,6 +426,73 @@ const CreateQuestionPaper = () => {
           >{loading ? "Submitting..." : "Publish"}</button>
         </div>
       </form>
+
+      {showTypeModal && (
+        <div style={{
+          position: "fixed",
+          top: 0, left: 0, right: 0, bottom: 0,
+          background: "rgba(0,0,0,0.4)",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          zIndex: 1000
+        }}>
+          <div style={{
+            background: "#fff",
+            padding: "2rem",
+            borderRadius: "12px",
+            boxShadow: "0 2px 8px rgba(0,0,0,0.2)",
+            textAlign: "center"
+          }}>
+            <h3>Choose Question Type</h3>
+            <button
+              style={{
+                margin: "1rem",
+                padding: "0.75rem 1.5rem",
+                borderRadius: "8px",
+                border: "2px solid #2a5298",
+                backgroundColor: "#2a5298",
+                color: "#fff",
+                fontWeight: "bold",
+                cursor: "pointer"
+              }}
+              onClick={() => handleAddQuestionWithType("mcq")}
+            >
+              MCQ
+            </button>
+            <button
+              style={{
+                margin: "1rem",
+                padding: "0.75rem 1.5rem",
+                borderRadius: "8px",
+                border: "2px solid #2a5298",
+                backgroundColor: "#fff",
+                color: "#2a5298",
+                fontWeight: "bold",
+                cursor: "pointer"
+              }}
+              onClick={() => handleAddQuestionWithType("descriptive")}
+            >
+              Descriptive
+            </button>
+            <div>
+              <button
+                style={{
+                  marginTop: "1rem",
+                  background: "none",
+                  border: "none",
+                  color: "#dc2626",
+                  cursor: "pointer",
+                  fontWeight: "bold"
+                }}
+                onClick={() => { setShowTypeModal(false); setPendingAdd(false); }} // <-- already present here
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
