@@ -147,7 +147,7 @@ export default function AdminDashboard() {
       return;
     }
     try {
-      const response = await fetch(`/api/admin/getDeleteUser?id=${userId}&type=${userType}`, {
+      const response = await fetch(`/api/admin/deleteUser?id=${userId}&type=${userType}`, {
         method: 'DELETE',
         credentials: 'include'
       });
