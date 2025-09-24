@@ -12,10 +12,21 @@ const SolutionPaperSchema = new mongoose.Schema({
     {
       questionId: { type: String, required: true }, // Reference to original question
       question: { type: String, required: true },
+      type: { type: String, enum: ['mcq', 'descriptive'], required: true },
+
+      // For objective
       selectedOption: { type: String },
-      correctOption: { type: String, required: true },
-      marks: { type: Number, required: true }, // Marks for this question
-      isCorrect: { type: Boolean, required: true }, // Whether answer is correct
+      correctOption: { type: String },
+      isCorrect: { type: Boolean },
+
+      // For descriptive
+      studentAnswer: { type: String },
+      correctAnswer: { type: String },
+      score: { type: Number },
+      feedback: { type: String }, // explanation/feedback from LLM
+
+      // Common
+      marks: { type: Number, required: true }
     },
   ],
   submittedAt: { type: Date, default: Date.now },
@@ -25,7 +36,7 @@ const SolutionPaperSchema = new mongoose.Schema({
   status: { type: String, enum: ['completed', 'timeout', 'submitted'], required: true },
 });
 
-// Add index for faster querying
+// Index for efficient lookup
 SolutionPaperSchema.index({ studentId: 1, paperId: 1 });
 
 const Solution = mongoose.models.Solution || mongoose.model("Solution", SolutionPaperSchema);
