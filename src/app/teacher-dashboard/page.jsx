@@ -64,7 +64,7 @@ export default function TeacherDashboard() {
           });
   
           const authData = await authRes.json();
-  
+          //console.log('Auth Data:', authData);
           if (!authRes.ok || !authData.authenticated) {
             throw new Error(authData.error || 'Not authenticated');
           }
@@ -104,6 +104,7 @@ export default function TeacherDashboard() {
   
           // Fetch student details for each paper
           // In useEffect, update the resultsWithStudents mapping
+          //console.log('Papers Data:', papersData);
           const resultsWithStudents = await Promise.all(
             papersData.map(async (paper) => {
               const studentRes = await fetch(`/api/users/${paper.studentId}`);
@@ -565,7 +566,7 @@ export default function TeacherDashboard() {
                 marginBottom: '0.5rem',
                 fontWeight: '500'
               }}>
-                Total Students
+                Total Students who gave Exams
               </h4>
               <div style={{ 
                 fontSize: '2.5rem', 
@@ -592,7 +593,7 @@ export default function TeacherDashboard() {
                   borderRadius: '50%',
                   display: 'inline-block'
                 }} />
-                Unique students who have taken exams
+                Unique students who have given exams
               </div>
             </div>
           </div>
