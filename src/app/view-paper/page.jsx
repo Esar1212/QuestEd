@@ -220,37 +220,55 @@ export default function ViewPapersPage() {
                         }}>
                           {q.marks} marks
                         </span>
-                        
-                        {/* Options list */}
-                        <div style={{ 
-                          marginTop: '0.5rem',
-                          paddingLeft: '1.5rem'
+
+                        {/* MCQ Options */}
+                        {q.type === "mcq" && (
+                          <div style={{ marginTop: '0.5rem', paddingLeft: '1.5rem' }}>
+                            {q.options && q.options.map((option, optIndex) => (
+                              <div key={optIndex} style={{
+                                marginBottom: '0.25rem',
+                                color: '#4a5568',
+                                fontSize: '0.95rem',
+                                display: 'flex',
+                                alignItems: 'center',
+                                backgroundColor: q.correctAnswer === option ? '#f0fdf4' : 'transparent',
+                                padding: '0.25rem 0.5rem',
+                                borderRadius: '4px'
+                              }}>
+                                <span>{String.fromCharCode(65 + optIndex)}. {option}</span>
+                                {q.answer === option && (
+                                  <span style={{
+                                    marginLeft: '0.5rem',
+                                    color: '#059669',
+                                    fontSize: '0.875rem',
+                                    fontWeight: '500'
+                                  }}>
+                                    ✓ Correct Answer
+                                  </span>
+                                )}
+                              </div>
+                            ))}
+                          </div>
+                        )}
+
+                        {q.type === "descriptive" && (
+                        <div style={{ marginTop: '0.75rem' }}>
+                         <p style={{ fontWeight: 500, color: '#2a5298', marginBottom: '0.25rem' }}>
+                             Correct Answer:
+                         </p>
+                      <div style={{
+                         backgroundColor: '#f1f5f9',
+                         borderRadius: '6px',
+                         padding: '0.75rem',
+                         color: '#334155',
+                         fontSize: '1rem',
+                         whiteSpace: 'pre-wrap'
                         }}>
-                          {q.options && q.options.map((option, optIndex) => (
-                            <div key={optIndex} style={{
-                              marginBottom: '0.25rem',
-                              color: '#4a5568',
-                              fontSize: '0.95rem',
-                              display: 'flex',
-                              alignItems: 'center',
-                              backgroundColor: q.correctAnswer === option ? '#f0fdf4' : 'transparent',
-                              padding: '0.25rem 0.5rem',
-                              borderRadius: '4px'
-                            }}>
-                              <span>{String.fromCharCode(65 + optIndex)}. {option}</span>
-                              {q.answer === option && (
-                                <span style={{
-                                  marginLeft: '0.5rem',
-                                  color: '#059669',
-                                  fontSize: '0.875rem',
-                                  fontWeight: '500'
-                                }}>
-                                  ✓ Correct Answer
-                                </span>
-                              )}
-                            </div>
-                          ))}
-                        </div>
+                         {q.answer}
+                      </div>
+                  </div>
+                )}
+
                       </li>
                     ))}
                   </ul>
