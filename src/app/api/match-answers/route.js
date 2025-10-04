@@ -21,6 +21,11 @@ export async function POST(request) {
 
     const SystemPrompt = `You are a helpful assistant that matches answers to questions.
     You are an exam evaluator. The following is the correct answer and a student's answer. Give a score between 0 and ${marks} based on how closely the student's answer matches the correct answer. Also give a short justification.
+    Analyze the student's answer based on:
+   - Conceptual understanding
+   - Key points covered
+   - Clarity and structure
+   - Accuracy and depth of explanation
        Given Question:
       ${question}    
 
@@ -34,7 +39,11 @@ Respond in JSON format:
 {
   "score": [0-${marks}],
   "reason": "[Brief Explanation. Please refer the student as 'You']"
-}`;
+}
+Make sure the reason:
+- Highlights both strengths and weaknesses
+- Suggests specific improvements
+- Is concise (2–3 sentences max)`;
 
    const response = await ai.models.generateContent({
     model: "gemini-2.5-flash",
